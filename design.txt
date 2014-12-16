@@ -1,0 +1,12 @@
+2 cannons
+attack with power + angle
+hit other cannon to win round and score points
+play to x points to win
+randomly generated terrain and obstacles
+
+menu: vs player, vs ai, options, exit
+options:
+ terrain: flat/smooth/rough/extreme/random
+ obstacles: none/few/many/random
+ wind: none/slow/fast/random
+ fullscreen: on/off (windowed is 640x480 stretched)
