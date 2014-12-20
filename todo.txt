@@ -1,0 +1,10 @@
+terrain generation:
+create flat terrain
+decide how to store terrain info
+write function to determine if a pixel status (is it dirt or air?)
+vector of pixels? of structs with pixel color/status?
+create terrain with one gradual slope
+create terrain with many gradual slopes
+lookup terrain generation setting to select between diff terrain types
+decide how/where to place cannons
+add some randomization to cannon placement
