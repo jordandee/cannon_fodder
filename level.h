@@ -1,7 +1,9 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
+#include <vector>
 #include "gamestate.h"
+#include "terrain.h"
 
 class Level : public GameState
 {
@@ -20,6 +22,8 @@ protected:
 
 private:
   static Level _s;
+
+  std::vector<Pixel> terrain;
 };
 
 #endif

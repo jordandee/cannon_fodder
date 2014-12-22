@@ -1,10 +1,23 @@
 terrain generation:
-create flat terrain
-decide how to store terrain info
-write function to determine if a pixel status (is it dirt or air?)
-vector of pixels? of structs with pixel color/status?
-create terrain with one gradual slope
-create terrain with many gradual slopes
-lookup terrain generation setting to select between diff terrain types
-decide how/where to place cannons
+create terrain with four gradual slopes
+create terrain with four gradual slopes with randomized transition positions
+read settings file at startup to determine terrain type and set global var
+use terrain generation type global var to select between diff terrain types
+
+cannons:
+create cannon texture
+draw cannon on screen
+decide how to implement cannon placement, during or after terrain gen?
+place a cannon that works with terrain gen
+place second cannon that works with terrain gen
 add some randomization to cannon placement
+
+bugs??:
+after adding second slope type, game sometimes slow to close
+
+
+-create flat terrain
+-decide how to store terrain info - vector of pixels with x,y, status
+-write function to determine if a pixel status based on a slope
+-create terrain with one gradual slope
+-create terrain with two gradual slopes

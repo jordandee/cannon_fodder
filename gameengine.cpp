@@ -6,7 +6,7 @@ void GameEngine::init()
 {
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 
-  win = SDL_CreateWindow("Game Template", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
+  win = SDL_CreateWindow("Cannon Fodder", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
   renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 }
 

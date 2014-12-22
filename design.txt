@@ -6,7 +6,8 @@ randomly generated terrain and obstacles
 
 menu: vs player, vs ai, options, exit
 options:
- terrain: flat/smooth/rough/extreme/random
+ terrain: flat/smooth/rough/extreme/random (bonus: curvy smooth/rough)
  obstacles: none/few/many/random
  wind: none/slow/fast/random
- fullscreen: on/off (windowed is 640x480 stretched)
+ fullscreen: on/off (windowed is 800x600 stretched)
+ weapon: cannon ball/grenade (bonus)
