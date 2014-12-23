@@ -1,6 +1,7 @@
 #include "SDL2/SDL.h"
 #include "gameengine.h"
 #include "gamestate.h"
+#include "resources.h"
 
 void GameEngine::init()
 {
@@ -8,6 +9,8 @@ void GameEngine::init()
 
   win = SDL_CreateWindow("Cannon Fodder", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
   renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+
+  loadSettings();
 }
 
 void GameEngine::quit()
