@@ -1,4 +1,5 @@
-#include "SDL2/SDL.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include "gameengine.h"
 #include "gamestate.h"
 #include "resources.h"
@@ -11,12 +12,15 @@ void GameEngine::init()
   renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
   loadSettings();
+
+  IMG_Init(IMG_INIT_PNG);
 }
 
 void GameEngine::quit()
 {
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(win);
+  IMG_Quit();
   SDL_Quit();
 }
 

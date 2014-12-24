@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include "gameengine.h"
+#include "resources.h"
 #include "level.h"
 
 Level Level::_s;
@@ -9,10 +10,13 @@ Level Level::_s;
 void Level::init()
 {
   generateTerrain(terrain);
+
+  cannon = NULL;
 }
 
 void Level::quit()
 {
+  SDL_DestroyTexture(cannon);
 }
 
 void Level::handleEvents(GameEngine* ge)
@@ -32,6 +36,9 @@ void Level::update()
 
 void Level::render(GameEngine* ge)
 {
+  if (cannon == NULL)
+    cannon = loadTexture("images/cannon.png", ge->renderer);
+
   SDL_SetRenderDrawColor(ge->renderer, 0xff, 0xff, 0xff, 0);
   //SDL_SetRenderDrawColor(ge->renderer, 0x00, 0x00, 0x00, 0);
   SDL_RenderClear(ge->renderer);
@@ -45,5 +52,13 @@ void Level::render(GameEngine* ge)
       SDL_RenderDrawPoint(ge->renderer, it->x, it->y);
     }
   }
+
+  SDL_Rect dest;
+  dest.x = 100;
+  dest.y = 100;
+  dest.w = 30;
+  dest.h = 24;
+  SDL_RenderCopy(ge->renderer, cannon, NULL, &dest);
+
   SDL_RenderPresent(ge->renderer);
 }

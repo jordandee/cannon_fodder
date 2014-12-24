@@ -24,6 +24,7 @@ private:
   static Level _s;
 
   std::vector<Pixel> terrain;
+  SDL_Texture* cannon;
 };
 
 #endif

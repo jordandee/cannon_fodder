@@ -1,6 +1,5 @@
 cannons:
-create cannon texture
-draw cannon on screen
+alter texture loading so that it happens during init, not render
 decide how to implement cannon placement, during or after terrain gen?
 place a cannon that works with terrain gen
 place second cannon that works with terrain gen
@@ -20,3 +19,6 @@ terrain generation:
 -create terrain with four slopes with randomized transition positions
 -read settings file at startup to determine terrain type and set global var
 -use terrain generation type global var to select between diff terrain types
+
+-create cannon texture
+-draw cannon on screen
