@@ -7,11 +7,12 @@
 
 Level Level::_s;
 
-void Level::init()
+void Level::init(GameEngine* ge)
 {
   generateTerrain(terrain);
 
   cannon = NULL;
+  cannon = loadTexture("images/cannon.png", ge->renderer);
 }
 
 void Level::quit()
@@ -36,9 +37,6 @@ void Level::update()
 
 void Level::render(GameEngine* ge)
 {
-  if (cannon == NULL)
-    cannon = loadTexture("images/cannon.png", ge->renderer);
-
   SDL_SetRenderDrawColor(ge->renderer, 0xff, 0xff, 0xff, 0);
   //SDL_SetRenderDrawColor(ge->renderer, 0x00, 0x00, 0x00, 0);
   SDL_RenderClear(ge->renderer);

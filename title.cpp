@@ -5,7 +5,7 @@
 
 Title Title::_s;
 
-void Title::init()
+void Title::init(GameEngine* ge)
 {
 }
 

@@ -1,6 +1,6 @@
 cannons:
-alter texture loading so that it happens during init, not render
-decide how to implement cannon placement, during or after terrain gen?
+decide how to implement cannon placement, after terrain gen
+implement function to find top ground pixel at given x
 place a cannon that works with terrain gen
 place second cannon that works with terrain gen
 add some randomization to cannon placement
@@ -22,3 +22,4 @@ terrain generation:
 
 -create cannon texture
 -draw cannon on screen
+-alter texture loading so that it happens during init, not render

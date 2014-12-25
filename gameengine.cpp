@@ -29,7 +29,7 @@ void GameEngine::changeState(GameState* gamestate)
   if (gs != NULL)
     gs->quit();
   gs = gamestate;
-  gs->init();
+  gs->init(this);
 }
 
 void GameEngine::handleEvents()

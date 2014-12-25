@@ -6,7 +6,7 @@
 class Title : public GameState
 {
 public:
-  void init();
+  void init(GameEngine* ge);
   void quit();
 
   void handleEvents(GameEngine* ge);
