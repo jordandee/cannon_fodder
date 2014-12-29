@@ -25,6 +25,8 @@ private:
 
   std::vector<Pixel> terrain;
   SDL_Texture* cannon;
+  SDL_Rect cannon_rectL;
+  SDL_Rect cannon_rectR;
 };
 
 #endif

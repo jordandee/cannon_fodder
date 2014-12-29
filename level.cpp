@@ -1,7 +1,9 @@
 #include "SDL2/SDL.h"
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include "gameengine.h"
+#include "terrain.h"
 #include "resources.h"
 #include "level.h"
 
@@ -13,6 +15,28 @@ void Level::init(GameEngine* ge)
 
   cannon = NULL;
   cannon = loadTexture("images/cannon.png", ge->renderer);
+
+  // find placement for left cannon
+  auto lt = std::find_if(terrain.begin(), terrain.end(), isTopPixelL);
+  std::cout << lt->x << " " << lt->y << " " << std::endl;
+  cannon_rectL.w = 30;
+  cannon_rectL.h = 24;
+  cannon_rectL.x = lt->x;
+  cannon_rectL.y = lt->y - cannon_rectL.h;
+
+  // make sure cannon sits on terrain properly and does not overlap it
+  fixTerrain(terrain, lt->x, lt->y);
+
+  // find placement for right cannon
+  auto rt = std::find_if(terrain.begin(), terrain.end(), isTopPixelR);
+  std::cout << rt->x << " " << rt->y << " " << std::endl;
+  cannon_rectR.w = 30;
+  cannon_rectR.h = 24;
+  cannon_rectR.x = rt->x;
+  cannon_rectR.y = rt->y - cannon_rectR.h;
+
+  // make sure cannon sits on terrain properly and does not overlap it
+  fixTerrain(terrain, rt->x, rt->y);
 }
 
 void Level::quit()
@@ -51,12 +75,8 @@ void Level::render(GameEngine* ge)
     }
   }
 
-  SDL_Rect dest;
-  dest.x = 100;
-  dest.y = 100;
-  dest.w = 30;
-  dest.h = 24;
-  SDL_RenderCopy(ge->renderer, cannon, NULL, &dest);
+  SDL_RenderCopy(ge->renderer, cannon, NULL, &cannon_rectL);
+  SDL_RenderCopyEx(ge->renderer, cannon, NULL, &cannon_rectR, 0, NULL, SDL_FLIP_HORIZONTAL);
 
   SDL_RenderPresent(ge->renderer);
 }
