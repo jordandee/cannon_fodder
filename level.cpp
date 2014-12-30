@@ -14,7 +14,7 @@ void Level::init(GameEngine* ge)
   generateTerrain(terrain);
 
   cannon = NULL;
-  cannon = loadTexture("images/cannon.png", ge->renderer);
+  cannon = loadTexture("images/cannon_wheel.png", ge->renderer);
 
   // find placement for left cannon
   auto lt = std::find_if(terrain.begin(), terrain.end(), isTopPixelL);
@@ -37,6 +37,19 @@ void Level::init(GameEngine* ge)
 
   // make sure cannon sits on terrain properly and does not overlap it
   fixTerrain(terrain, rt->x, rt->y);
+
+  shaft = NULL;
+  shaft = loadTexture("images/cannon_shaft.png", ge->renderer);
+
+  shaft_rectL.w = 4;
+  shaft_rectL.h = 14;
+  shaft_rectL.x = cannon_rectL.x + 17;
+  shaft_rectL.y = cannon_rectL.y + 3;
+
+  shaft_rectR.w = 4;
+  shaft_rectR.h = 14;
+  shaft_rectR.x = cannon_rectR.x + 9;
+  shaft_rectR.y = cannon_rectR.y + 3;
 }
 
 void Level::quit()
@@ -77,6 +90,9 @@ void Level::render(GameEngine* ge)
 
   SDL_RenderCopy(ge->renderer, cannon, NULL, &cannon_rectL);
   SDL_RenderCopyEx(ge->renderer, cannon, NULL, &cannon_rectR, 0, NULL, SDL_FLIP_HORIZONTAL);
+
+  SDL_RenderCopy(ge->renderer, shaft, NULL, &shaft_rectL);
+  SDL_RenderCopy(ge->renderer, shaft, NULL, &shaft_rectR);
 
   SDL_RenderPresent(ge->renderer);
 }
