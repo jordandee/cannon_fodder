@@ -32,6 +32,9 @@ private:
   SDL_Texture* shaft;
   SDL_Rect shaft_rectL;
   SDL_Rect shaft_rectR;
+
+  double rotation_angleL;
+  SDL_Point rotation_pointL;
 };
 
 #endif

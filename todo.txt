@@ -1,7 +1,9 @@
 controls:
-rotate cannon barrel with arrow keys
 allow user to shoot cannon by holding space up to 1 or 2 seconds
 have holding space draw enlarging rect to indicate force
+
+gameplay:
+make the game alternate between players' turns/shots
 
 cannon ball:
 create texture
@@ -40,3 +42,4 @@ cannons:
 -add some randomization to cannon placement
 -split cannons into two parts, wheel and cannon barrel texture
 -display cannon as wheel background and cannon shaft foreground
+-rotate cannon barrel with arrow keys

@@ -46,6 +46,10 @@ void Level::init(GameEngine* ge)
   shaft_rectL.x = cannon_rectL.x + 17;
   shaft_rectL.y = cannon_rectL.y + 3;
 
+  rotation_angleL = 0.0;
+  rotation_pointL.x = shaft_rectL.w/2;
+  rotation_pointL.y = shaft_rectL.h-2;
+
   shaft_rectR.w = 4;
   shaft_rectR.h = 14;
   shaft_rectR.x = cannon_rectR.x + 9;
@@ -66,6 +70,18 @@ void Level::handleEvents(GameEngine* ge)
       if (e.type == SDL_KEYDOWN)
         if (e.key.keysym.sym == SDLK_ESCAPE)
           ge->stop();
+
+  const Uint8* state = SDL_GetKeyboardState(NULL);
+
+  if (state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT])
+  {
+    rotation_angleL += 1;
+  }
+  if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT])
+  {
+    rotation_angleL -= 1;
+  }
+
 }
 
 void Level::update()
@@ -91,7 +107,8 @@ void Level::render(GameEngine* ge)
   SDL_RenderCopy(ge->renderer, cannon, NULL, &cannon_rectL);
   SDL_RenderCopyEx(ge->renderer, cannon, NULL, &cannon_rectR, 0, NULL, SDL_FLIP_HORIZONTAL);
 
-  SDL_RenderCopy(ge->renderer, shaft, NULL, &shaft_rectL);
+
+  SDL_RenderCopyEx(ge->renderer, shaft, NULL, &shaft_rectL, rotation_angleL, &rotation_pointL, SDL_FLIP_NONE);
   SDL_RenderCopy(ge->renderer, shaft, NULL, &shaft_rectR);
 
   SDL_RenderPresent(ge->renderer);
