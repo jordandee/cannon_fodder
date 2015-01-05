@@ -5,12 +5,15 @@
 #include "gameengine.h"
 #include "terrain.h"
 #include "resources.h"
+#include "timer.h"
 #include "level.h"
 
 Level Level::_s;
 
 void Level::init(GameEngine* ge)
 {
+  timer.start();
+
   generateTerrain(terrain);
 
   cannon = NULL;
@@ -18,7 +21,7 @@ void Level::init(GameEngine* ge)
 
   // find placement for left cannon
   auto lt = std::find_if(terrain.begin(), terrain.end(), isTopPixelL);
-  std::cout << lt->x << " " << lt->y << " " << std::endl;
+  //std::cout << lt->x << " " << lt->y << " " << std::endl;
   cannon_rectL.w = 30;
   cannon_rectL.h = 24;
   cannon_rectL.x = lt->x;
@@ -29,7 +32,7 @@ void Level::init(GameEngine* ge)
 
   // find placement for right cannon
   auto rt = std::find_if(terrain.begin(), terrain.end(), isTopPixelR);
-  std::cout << rt->x << " " << rt->y << " " << std::endl;
+  //std::cout << rt->x << " " << rt->y << " " << std::endl;
   cannon_rectR.w = 30;
   cannon_rectR.h = 24;
   cannon_rectR.x = rt->x;
@@ -54,6 +57,19 @@ void Level::init(GameEngine* ge)
   shaft_rectR.h = 14;
   shaft_rectR.x = cannon_rectR.x + 9;
   shaft_rectR.y = cannon_rectR.y + 3;
+
+  ball = NULL;
+  ball = loadTexture("images/cannon_ball.png", ge->renderer);
+
+  ball_rect.w = 4;
+  ball_rect.h = 4;
+  ball_rect.x = 100;
+  ball_rect.y = 100;
+
+  bx = 100.0;
+  by = 100.0;
+  bv = 0.0;
+  ba = 20.0;
 }
 
 void Level::quit()
@@ -86,6 +102,14 @@ void Level::handleEvents(GameEngine* ge)
 
 void Level::update()
 {
+  dt = timer.getTime();
+  timer.start();
+
+  by = by + bv * dt + ba * dt * dt;
+  bv = bv + ba * dt;
+
+  ball_rect.x = (int) bx;
+  ball_rect.y = (int) by;
 }
 
 void Level::render(GameEngine* ge)
@@ -110,6 +134,8 @@ void Level::render(GameEngine* ge)
 
   SDL_RenderCopyEx(ge->renderer, shaft, NULL, &shaft_rectL, rotation_angleL, &rotation_pointL, SDL_FLIP_NONE);
   SDL_RenderCopy(ge->renderer, shaft, NULL, &shaft_rectR);
+
+  SDL_RenderCopy(ge->renderer, ball, NULL, &ball_rect);
 
   SDL_RenderPresent(ge->renderer);
 }

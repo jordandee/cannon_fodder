@@ -4,6 +4,7 @@
 #include <vector>
 #include "gamestate.h"
 #include "terrain.h"
+#include "timer.h"
 
 class Level : public GameState
 {
@@ -35,6 +36,13 @@ private:
 
   double rotation_angleL;
   SDL_Point rotation_pointL;
+
+  SDL_Texture* ball;
+  SDL_Rect ball_rect;
+  double bx, by, bv, ba;
+
+  Timer timer;
+  double dt;
 };
 
 #endif
