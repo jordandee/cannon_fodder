@@ -5,6 +5,7 @@
 #include "gamestate.h"
 #include "terrain.h"
 #include "timer.h"
+#include "cannon.h"
 
 class Level : public GameState
 {
@@ -26,16 +27,7 @@ private:
 
   std::vector<Pixel> terrain;
 
-  SDL_Texture* cannon;
-  SDL_Rect cannon_rectL;
-  SDL_Rect cannon_rectR;
-
-  SDL_Texture* shaft;
-  SDL_Rect shaft_rectL;
-  SDL_Rect shaft_rectR;
-
-  double rotation_angleL;
-  SDL_Point rotation_pointL;
+  Cannon cannonL, cannonR;
 
   SDL_Texture* ball;
   SDL_Rect ball_rect;
