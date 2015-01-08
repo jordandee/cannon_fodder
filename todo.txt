@@ -1,6 +1,3 @@
-refactor:
-create ball class and use with gravity test
-
 controls:
 allow user to shoot cannon by holding space up to 1 or 2 seconds
 have holding space draw enlarging rect to indicate force
@@ -51,8 +48,9 @@ physics:
 -implement gravity
 -test gravity by allowing ball to drop from air
 
-refactor:
--create cannon class and use two objects in level
-
 bugs??:
 -after holding space for a while to rotate, game is slow to close, is it getting stuck in a loop looking at keys and not seeing escape? was not looping through events, was only checking one event per frame
+
+refactor:
+-create cannon class and use two objects in level
+-create ball class and use with gravity test

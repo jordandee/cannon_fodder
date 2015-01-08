@@ -6,6 +6,7 @@
 #include "terrain.h"
 #include "timer.h"
 #include "cannon.h"
+#include "ball.h"
 
 class Level : public GameState
 {
@@ -29,9 +30,7 @@ private:
 
   Cannon cannonL, cannonR;
 
-  SDL_Texture* ball;
-  SDL_Rect ball_rect;
-  double bx, by, bv, ba;
+  Ball ball;
 
   Timer timer;
   double dt;

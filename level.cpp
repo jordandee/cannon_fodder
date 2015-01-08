@@ -7,6 +7,7 @@
 #include "resources.h"
 #include "timer.h"
 #include "cannon.h"
+#include "ball.h"
 #include "level.h"
 
 Level Level::_s;
@@ -39,18 +40,7 @@ void Level::init(GameEngine* ge)
   // make sure cannon sits on terrain properly and does not overlap it
   fixTerrain(terrain, rt->x, rt->y);
 
-  ball = NULL;
-  ball = loadTexture("images/cannon_ball.png", ge->renderer);
-
-  ball_rect.w = 4;
-  ball_rect.h = 4;
-  ball_rect.x = 100;
-  ball_rect.y = 100;
-
-  bx = 100.0;
-  by = 100.0;
-  bv = 0.0;
-  ba = 20.0;
+  ball.init(ge->renderer);
 }
 
 void Level::quit()
@@ -85,11 +75,7 @@ void Level::update()
   dt = timer.getTime();
   timer.start();
 
-  by = by + bv * dt + ba * dt * dt;
-  bv = bv + ba * dt;
-
-  ball_rect.x = (int) bx;
-  ball_rect.y = (int) by;
+  ball.update(dt);
 }
 
 void Level::render(GameEngine* ge)
@@ -111,7 +97,7 @@ void Level::render(GameEngine* ge)
   cannonL.render(ge->renderer);
   cannonR.render(ge->renderer);
 
-  SDL_RenderCopy(ge->renderer, ball, NULL, &ball_rect);
+  ball.render(ge->renderer);
 
   SDL_RenderPresent(ge->renderer);
 }
