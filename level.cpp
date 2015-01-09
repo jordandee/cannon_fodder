@@ -41,6 +41,9 @@ void Level::init(GameEngine* ge)
   fixTerrain(terrain, rt->x, rt->y);
 
   ball.init(ge->renderer);
+
+  shooting = false;
+  keyup_frames = 0;
 }
 
 void Level::quit()
@@ -51,11 +54,15 @@ void Level::handleEvents(GameEngine* ge)
 {
   SDL_Event e;
   while (SDL_PollEvent(&e))
+  {
     if (e.type == SDL_QUIT)
       ge->stop();
     if (e.type == SDL_KEYDOWN)
+    {
       if (e.key.keysym.sym == SDLK_ESCAPE)
         ge->stop();
+    }
+  }
 
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
@@ -67,7 +74,31 @@ void Level::handleEvents(GameEngine* ge)
   {
     cannonL.incrementAngle(-5.0);
   }
-
+  if (state[SDL_SCANCODE_SPACE])
+  {
+    if (!shooting)
+    {
+      std::cout << "space\n";
+      shooting = true;
+      shot_dt = 0.0;
+      shot_timer.start();
+    }
+  }
+  else
+  {
+    if (shooting)
+    {
+      keyup_frames++; // synergy hack, synergy creates false positive keyups
+      if (keyup_frames >= 5)
+      {
+        std::cout << "space up\n";
+        shooting = false;
+        shot_dt = shot_timer.getTime();
+        std::cout << "shot_dt: " << shot_dt << "\n";
+        keyup_frames = 0;
+      }
+    }
+  }
 }
 
 void Level::update()

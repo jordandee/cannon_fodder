@@ -32,8 +32,11 @@ private:
 
   Ball ball;
 
-  Timer timer;
+  Timer timer, shot_timer;
   double dt;
+  double shot_dt;
+  bool shooting;
+  int keyup_frames;
 };
 
 #endif
