@@ -19,6 +19,10 @@ class Cannon
     void setPosition(int x, int y);
     void incrementAngle(double a);
 
+    int getCX();
+    int getCY();
+    double getAngle();
+
   private:
     SDL_Texture* cannon_texture;
     SDL_Rect cannon_rect;

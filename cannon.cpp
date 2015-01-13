@@ -72,3 +72,18 @@ void Cannon::incrementAngle(double a)
 {
   shaft_rotation_angle += a;
 }
+
+int Cannon::getCX()
+{
+  return cannon_rect.x + (CANNON_WIDTH/2);
+}
+
+int Cannon::getCY()
+{
+  return cannon_rect.y + (CANNON_HEIGHT/2);
+}
+
+double Cannon::getAngle()
+{
+  return shaft_rotation_angle;
+}

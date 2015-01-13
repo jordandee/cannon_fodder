@@ -78,7 +78,7 @@ void Level::handleEvents(GameEngine* ge)
   {
     if (!shooting)
     {
-      std::cout << "space\n";
+      //std::cout << "space\n";
       shooting = true;
       shot_dt = 0.0;
       shot_timer.start();
@@ -91,11 +91,13 @@ void Level::handleEvents(GameEngine* ge)
       keyup_frames++; // synergy hack, synergy creates false positive keyups
       if (keyup_frames >= 5)
       {
-        std::cout << "space up\n";
+        //std::cout << "space up\n";
         shooting = false;
         shot_dt = shot_timer.getTime();
         std::cout << "shot_dt: " << shot_dt << "\n";
         keyup_frames = 0;
+
+        ball.shoot(cannonL.getCX(), cannonL.getCY(), shot_dt, cannonL.getAngle());
       }
     }
   }

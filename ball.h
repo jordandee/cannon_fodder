@@ -19,6 +19,8 @@ class Ball
     void setPosition(int x, int y);
     void incrementAngle(double a);
 
+    void shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle);
+
   private:
     SDL_Texture* ball_texture;
     SDL_Rect ball_rect;

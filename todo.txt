@@ -1,14 +1,23 @@
 controls:
-have holding space up to 1-3 seconds trigger cannon shot
-have holding space draw enlarging rect to indicate force
+have holding space draw enlarging rect to indicate force, figure out force/shot_dt cap, also figure out min allowed force to see cannon ball
+
+collision:
+detect when cannon ball hits ground, destroy terrain within radius
+detect when cannon ball hits a cannon, destroy cannon
 
 gameplay:
+test shooting with the right cannon
 make the game alternate between players' turns/shots
 
-physics:
-test gravity by simulating fake shot straight into air
-test gravity by simulating fake shot angled into air
-try out range of shots to figure out sane force values
+scoring:
+store player points
+give points when one player shoots another
+add font display
+show player points using fonts at top of screen
+
+menu:
+add simple menu with background picture (screenshot + title ?)
+add text box for each option: vs player, vs ai, options, exit
 
 bugs??:
 after adding second slope type, game sometimes slow to close
@@ -57,3 +66,9 @@ refactor:
 
 controls:
 -record how long user holds space to determine shot force
+-have holding space up to 1-3 seconds trigger cannon shot
+
+physics:
+-test gravity by simulating fake shot straight into air
+-test gravity by simulating fake shot angled into air
+-try out range of shots to figure out sane force values
