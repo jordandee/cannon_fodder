@@ -1,5 +1,5 @@
 controls:
-have holding space draw enlarging rect to indicate force, figure out force/shot_dt cap, also figure out min allowed force to see cannon ball
+figure out max shot_dt cap, if any?
 
 collision:
 detect when cannon ball hits ground, destroy terrain within radius
@@ -72,3 +72,7 @@ physics:
 -test gravity by simulating fake shot straight into air
 -test gravity by simulating fake shot angled into air
 -try out range of shots to figure out sane force values
+
+controls:
+-have holding space draw enlarging rect to indicate force
+-figure out min allowed force to see cannon ball

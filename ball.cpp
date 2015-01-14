@@ -74,6 +74,10 @@ void Ball::shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle
   ball_rect.x = x;
   ball_rect.y = y;
 
+  const double min_shot_dt = .4;
+  if (shot_dt < min_shot_dt)
+    shot_dt = min_shot_dt;
+
   double vr = shot_dt * 100.0;
 
   vx = vr * sin(shot_angle * PI/180.0);

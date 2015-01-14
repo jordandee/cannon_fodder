@@ -43,11 +43,21 @@ void Level::init(GameEngine* ge)
   ball.init(ge->renderer);
 
   shooting = false;
+  shot_dt = 0.0;
   keyup_frames = 0;
+
+  force_texture = NULL;
+  force_texture = loadTexture("images/cannon_ball.png", ge->renderer);
+
+  force_rect.w = 4;
+  force_rect.h = 16;
+  force_rect.x = 10;
+  force_rect.y = 10;
 }
 
 void Level::quit()
 {
+  SDL_DestroyTexture(force_texture);
 }
 
 void Level::handleEvents(GameEngine* ge)
@@ -83,6 +93,10 @@ void Level::handleEvents(GameEngine* ge)
       shot_dt = 0.0;
       shot_timer.start();
     }
+    else
+    {
+      shot_dt = shot_timer.getTime();
+    }
   }
   else
   {
@@ -98,6 +112,7 @@ void Level::handleEvents(GameEngine* ge)
         keyup_frames = 0;
 
         ball.shoot(cannonL.getCX(), cannonL.getCY(), shot_dt, cannonL.getAngle());
+        shot_dt = 0.0;
       }
     }
   }
@@ -109,6 +124,12 @@ void Level::update()
   timer.start();
 
   ball.update(dt);
+
+  const double min_shot_dt = .4;
+  if (shot_dt < min_shot_dt)
+    force_rect.w = min_shot_dt * 64;
+  else
+    force_rect.w = shot_dt * 64;
 }
 
 void Level::render(GameEngine* ge)
@@ -131,6 +152,9 @@ void Level::render(GameEngine* ge)
   cannonR.render(ge->renderer);
 
   ball.render(ge->renderer);
+
+  if (shot_dt != 0.0)
+    SDL_RenderCopy(ge->renderer, force_texture, NULL, &force_rect);
 
   SDL_RenderPresent(ge->renderer);
 }

@@ -37,6 +37,9 @@ private:
   double shot_dt;
   bool shooting;
   int keyup_frames;
+
+  SDL_Texture* force_texture;
+  SDL_Rect force_rect;
 };
 
 #endif
