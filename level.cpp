@@ -123,7 +123,7 @@ void Level::update()
   dt = timer.getTime();
   timer.start();
 
-  ball.update(dt);
+  ball.update(dt, terrain);
 
   const double min_shot_dt = .4;
   if (shot_dt < min_shot_dt)

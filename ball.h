@@ -2,6 +2,8 @@
 #define BALL_H
 
 #include <SDL2/SDL.h>
+#include <vector>
+#include "terrain.h"
 
 #define BALL_WIDTH 4
 #define BALL_HEIGHT 4
@@ -13,7 +15,7 @@ class Ball
     ~Ball();
 
     void init(SDL_Renderer* renderer);
-    void update(double dt);
+    void update(double dt, std::vector<Pixel>& terrain);
     void render(SDL_Renderer* renderer);
 
     void setPosition(int x, int y);
@@ -22,6 +24,8 @@ class Ball
     void shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle);
 
   private:
+    bool alive;
+
     SDL_Texture* ball_texture;
     SDL_Rect ball_rect;
 

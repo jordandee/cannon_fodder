@@ -1,4 +1,6 @@
+#include <SDL2/SDL.h>
 #include <vector>
+#include <cmath>
 #include "terrain.h"
 #include "math.h"
 #include "globals.h"
@@ -165,8 +167,8 @@ bool isTopPixelR(Pixel p)
     return false;
 }
 
-// take bottom cannon coordinates
-// get ride of overlapping dirt and cannon
+// take bottom left cannon coordinates
+// get rid of overlapping dirt and cannon
 // make sure cannon sits on dirt
 void fixTerrain(std::vector<Pixel>& terrain, int bx, int by)
 {
@@ -181,3 +183,47 @@ void fixTerrain(std::vector<Pixel>& terrain, int bx, int by)
     }
   }
 }
+
+bool checkTerrainCollision(SDL_Rect* ball, std::vector<Pixel>& terrain)
+{
+  bool collision_detected = false;
+
+  auto it = terrain.begin();
+  while (it != terrain.end() && !collision_detected)
+  {
+    while (!it->status)
+      ++it;
+
+    // check if ball center is on dirt block
+    if (ball->x+2 == it->x && ball->y+2 == it->y)
+    {
+      collision_detected = true;
+
+      explodeTerrain(it->x, it->y, terrain);
+    }
+    ++it;
+  }
+
+  return collision_detected;
+}
+
+void explodeTerrain(int x, int y, std::vector<Pixel>& terrain)
+{
+  double cx = (double) x;
+  double cy = (double) y;
+
+  const double explode_radius = 20.0;
+  double radius;
+
+  for (auto it = terrain.begin(); it != terrain.end(); ++it)
+  {
+    if (it->status)
+    {
+      radius = sqrt( (cx - (double)it->x)*(cx - (double)it->x) +
+                     (cy - (double)it->y)*(cy - (double)it->y) );
+      if (radius < explode_radius)
+        it->status = 0;
+    }
+  }
+}
+
