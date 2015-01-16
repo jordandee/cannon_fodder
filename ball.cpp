@@ -70,14 +70,6 @@ void Ball::render(SDL_Renderer* renderer)
     SDL_RenderCopyEx(renderer, ball_texture, NULL, &ball_rect, ball_angle, &ball_rotation_point, SDL_FLIP_NONE);
 }
 
-void Ball::setPosition(int x, int y)
-{
-}
-
-void Ball::incrementAngle(double a)
-{
-}
-
 void Ball::shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle)
 {
   x = cannon_cx + (BALL_WIDTH/2);
@@ -99,4 +91,20 @@ void Ball::shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle
   ball_angle = shot_angle;
 
   alive = true;
+}
+
+bool Ball::checkCannonCollision(SDL_Rect* cannon_rect)
+{
+  bool collision_detected = true;
+
+  if (ball_rect.x + ball_rect.w < cannon_rect->x)
+    collision_detected = false;
+  if (ball_rect.y + ball_rect.h < cannon_rect->y)
+    collision_detected = false;
+  if (ball_rect.x > cannon_rect->x + cannon_rect->w)
+    collision_detected = false;
+  if (ball_rect.y > cannon_rect->y + cannon_rect->h)
+    collision_detected = false;
+
+  return collision_detected;
 }

@@ -16,6 +16,8 @@ Cannon::~Cannon()
 
 void Cannon::init(SDL_Renderer* renderer, bool flipped)
 {
+  alive = true;
+
   is_flipped = flipped;
 
   cannon_texture = loadTexture("images/cannon_wheel.png", renderer);
@@ -39,16 +41,19 @@ void Cannon::update()
 
 void Cannon::render(SDL_Renderer* renderer)
 {
-  if (!is_flipped)
+  if (alive)
   {
-    SDL_RenderCopy(renderer, cannon_texture, NULL, &cannon_rect);
-  }
-  else
-  {
-    SDL_RenderCopyEx(renderer, cannon_texture, NULL, &cannon_rect, 0, NULL, SDL_FLIP_HORIZONTAL);
-  }
+    if (!is_flipped)
+    {
+      SDL_RenderCopy(renderer, cannon_texture, NULL, &cannon_rect);
+    }
+    else
+    {
+      SDL_RenderCopyEx(renderer, cannon_texture, NULL, &cannon_rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+    }
 
-  SDL_RenderCopyEx(renderer, shaft_texture, NULL, &shaft_rect, shaft_rotation_angle, &shaft_rotation_point, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer, shaft_texture, NULL, &shaft_rect, shaft_rotation_angle, &shaft_rotation_point, SDL_FLIP_NONE);
+  }
 }
 
 void Cannon::setPosition(int x, int y)
@@ -86,4 +91,14 @@ int Cannon::getCY()
 double Cannon::getAngle()
 {
   return shaft_rotation_angle;
+}
+
+SDL_Rect* Cannon::getRect()
+{
+  return &cannon_rect;
+}
+
+void Cannon::die()
+{
+  alive = false;
 }

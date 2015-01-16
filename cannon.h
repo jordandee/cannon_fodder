@@ -22,8 +22,13 @@ class Cannon
     int getCX();
     int getCY();
     double getAngle();
+    SDL_Rect* getRect();
+
+    void die();
 
   private:
+    bool alive;
+
     SDL_Texture* cannon_texture;
     SDL_Rect cannon_rect;
 

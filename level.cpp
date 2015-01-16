@@ -124,6 +124,10 @@ void Level::update()
   timer.start();
 
   ball.update(dt, terrain);
+  if (ball.checkCannonCollision(cannonR.getRect()))
+  {
+    cannonR.die();
+  }
 
   const double min_shot_dt = .4;
   if (shot_dt < min_shot_dt)

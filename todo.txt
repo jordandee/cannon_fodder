@@ -1,13 +1,10 @@
 controls:
 figure out max shot_dt cap, if any?
 
-collision:
-detect when cannon ball hits ground, destroy terrain within radius
-detect when cannon ball hits a cannon, destroy cannon
-
 gameplay:
 test shooting with the right cannon
 make the game alternate between players' turns/shots
+make it so you can only shoot opposing cannon
 
 scoring:
 store player points
@@ -79,3 +76,4 @@ controls:
 
 collision:
 -detect when cannon ball hits ground, destroy terrain within radius
+-detect when cannon ball hits a cannon, destroy cannon

@@ -18,10 +18,9 @@ class Ball
     void update(double dt, std::vector<Pixel>& terrain);
     void render(SDL_Renderer* renderer);
 
-    void setPosition(int x, int y);
-    void incrementAngle(double a);
-
     void shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle);
+
+    bool checkCannonCollision(SDL_Rect* cannon_rect);
 
   private:
     bool alive;
