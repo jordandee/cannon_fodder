@@ -53,6 +53,8 @@ void Level::init(GameEngine* ge)
   force_rect.h = 16;
   force_rect.x = 10;
   force_rect.y = 10;
+
+  is_player1 = true;
 }
 
 void Level::quit()
@@ -78,11 +80,17 @@ void Level::handleEvents(GameEngine* ge)
 
   if (state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT])
   {
-    cannonL.incrementAngle(5.0);
+    if (is_player1)
+      cannonL.incrementAngle(5.0);
+    else
+      cannonR.incrementAngle(5.0);
   }
   if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT])
   {
-    cannonL.incrementAngle(-5.0);
+    if (is_player1)
+      cannonL.incrementAngle(-5.0);
+    else
+      cannonR.incrementAngle(-5.0);
   }
   if (state[SDL_SCANCODE_SPACE])
   {
@@ -111,7 +119,10 @@ void Level::handleEvents(GameEngine* ge)
         std::cout << "shot_dt: " << shot_dt << "\n";
         keyup_frames = 0;
 
-        ball.shoot(cannonL.getCX(), cannonL.getCY(), shot_dt, cannonL.getAngle());
+        if (is_player1)
+          ball.shoot(cannonL.getCX(), cannonL.getCY(), shot_dt, cannonL.getAngle());
+        else
+          ball.shoot(cannonR.getCX(), cannonR.getCY(), shot_dt, cannonR.getAngle());
         shot_dt = 0.0;
       }
     }
@@ -123,10 +134,25 @@ void Level::update()
   dt = timer.getTime();
   timer.start();
 
-  ball.update(dt, terrain);
-  if (ball.checkCannonCollision(cannonR.getRect()))
+  ball.update(dt);
+  if (ball.checkTerrainCollision(terrain))
+    is_player1 = !is_player1;
+
+  if (is_player1)
   {
-    cannonR.die();
+    if (ball.checkCannonCollision(cannonR.getRect()))
+    {
+      cannonR.die();
+      is_player1 = !is_player1;
+    }
+  }
+  else
+  {
+    if (ball.checkCannonCollision(cannonL.getRect()))
+    {
+      cannonL.die();
+      is_player1 = !is_player1;
+    }
   }
 
   const double min_shot_dt = .4;

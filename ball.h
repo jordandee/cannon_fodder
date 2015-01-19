@@ -15,12 +15,15 @@ class Ball
     ~Ball();
 
     void init(SDL_Renderer* renderer);
-    void update(double dt, std::vector<Pixel>& terrain);
+    void update(double dt);
     void render(SDL_Renderer* renderer);
 
     void shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle);
 
     bool checkCannonCollision(SDL_Rect* cannon_rect);
+    bool checkTerrainCollision(std::vector<Pixel>& terrain);
+
+    bool isDead();
 
   private:
     bool alive;

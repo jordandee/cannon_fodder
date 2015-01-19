@@ -40,6 +40,8 @@ private:
 
   SDL_Texture* force_texture;
   SDL_Rect force_rect;
+
+  bool is_player1;
 };
 
 #endif

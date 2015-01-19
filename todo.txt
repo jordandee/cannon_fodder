@@ -1,16 +1,15 @@
 controls:
 figure out max shot_dt cap, if any?
 
-gameplay:
-test shooting with the right cannon
-make the game alternate between players' turns/shots
-make it so you can only shoot opposing cannon
-
 scoring:
 store player points
 give points when one player shoots another
 add font display
 show player points using fonts at top of screen
+
+gameplay:
+don't let dead cannon shoot
+respawn cannons some time after death
 
 menu:
 add simple menu with background picture (screenshot + title ?)
@@ -77,3 +76,8 @@ controls:
 collision:
 -detect when cannon ball hits ground, destroy terrain within radius
 -detect when cannon ball hits a cannon, destroy cannon
+
+gameplay:
+-test shooting with the right cannon
+-make the game alternate between players' turns/shots
+-make it so you can only shoot opposing cannon

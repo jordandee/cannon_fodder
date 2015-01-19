@@ -40,7 +40,7 @@ void Ball::init(SDL_Renderer* renderer)
   ball_rotation_point.y = BALL_HEIGHT/2;
 }
 
-void Ball::update(double dt, std::vector<Pixel>& terrain)
+void Ball::update(double dt)
 {
   if (alive)
   {
@@ -52,9 +52,6 @@ void Ball::update(double dt, std::vector<Pixel>& terrain)
 
     ball_rect.x = (int) x;
     ball_rect.y = (int) y;
-
-    if (checkTerrainCollision(&ball_rect, terrain))
-      alive = false;
 
     // rotate ball 180 degrees/sec unless it's going straight up/down
     if (vx > 0)
@@ -93,6 +90,32 @@ void Ball::shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle
   alive = true;
 }
 
+bool Ball::checkTerrainCollision(std::vector<Pixel>& terrain)
+{
+  bool collision_detected = false;
+
+  auto it = terrain.begin();
+  while (it != terrain.end() && !collision_detected)
+  {
+    while (!it->status)
+      ++it;
+
+    // check if ball center is on dirt block
+    if (ball_rect.x+BALL_WIDTH/2 == it->x && 
+        ball_rect.y+BALL_HEIGHT/2 == it->y)
+    {
+      collision_detected = true;
+
+      alive = false;
+
+      explodeTerrain(it->x, it->y, terrain);
+    }
+    ++it;
+  }
+
+  return collision_detected;
+}
+
 bool Ball::checkCannonCollision(SDL_Rect* cannon_rect)
 {
   bool collision_detected = true;
@@ -106,5 +129,13 @@ bool Ball::checkCannonCollision(SDL_Rect* cannon_rect)
   if (ball_rect.y > cannon_rect->y + cannon_rect->h)
     collision_detected = false;
 
+  if (collision_detected)
+    alive = false;
+
   return collision_detected;
+}
+
+bool Ball::isDead()
+{
+  return !alive;
 }
