@@ -2,8 +2,6 @@ controls:
 figure out max shot_dt cap, if any?
 
 scoring:
-store player points
-give points when one player shoots another
 add font display
 show player points using fonts at top of screen
 
@@ -81,3 +79,7 @@ gameplay:
 -test shooting with the right cannon
 -make the game alternate between players' turns/shots
 -make it so you can only shoot opposing cannon
+
+scoring:
+-store player points
+-give points when one player shoots another

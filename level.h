@@ -29,6 +29,7 @@ private:
   std::vector<Pixel> terrain;
 
   Cannon cannonL, cannonR;
+  int scoreL, scoreR;
 
   Ball ball;
 

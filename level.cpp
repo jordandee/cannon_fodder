@@ -55,6 +55,9 @@ void Level::init(GameEngine* ge)
   force_rect.y = 10;
 
   is_player1 = true;
+
+  scoreL = 0;
+  scoreR = 0;
 }
 
 void Level::quit()
@@ -143,6 +146,7 @@ void Level::update()
     if (ball.checkCannonCollision(cannonR.getRect()))
     {
       cannonR.die();
+      scoreL += 10;
       is_player1 = !is_player1;
     }
   }
@@ -151,6 +155,7 @@ void Level::update()
     if (ball.checkCannonCollision(cannonL.getRect()))
     {
       cannonL.die();
+      scoreR += 10;
       is_player1 = !is_player1;
     }
   }
