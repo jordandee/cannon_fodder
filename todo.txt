@@ -2,8 +2,7 @@ controls:
 figure out max shot_dt cap, if any?
 
 scoring:
-find new ttf font that fits the game appropriately
-position <- Score -> correctly at top of screen
+refactor score code into a class
 show player points using fonts at top of screen
 
 gameplay:
@@ -19,6 +18,9 @@ add text box for each option: vs player, vs ai, options, exit
 
 bugs??:
 after adding second slope type, game sometimes slow to close
+
+would be nice:
+get ChicagoBold font since I believe that was used in the original game
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -88,3 +90,5 @@ scoring:
 -store player points
 -give points when one player shoots another
 -add font display capability
+-find new ttf font that fits the game appropriately
+-position <- Score -> correctly at top of screen

@@ -62,12 +62,16 @@ void Level::init(GameEngine* ge)
 
   text_texture = NULL;
   font = NULL;
-  font = TTF_OpenFont("fonts/AeroviasBrasilNF.ttf", 64);
+  font = TTF_OpenFont("fonts/Chicago.ttf", 12);
   text_surf = NULL;
-  text_rect = {100,100,100,50};
+  text_rect = {0,5,0,0};
   text_color = {0,0,0};
 
-  char score[6] = "Score";
+  char score[10] = "<-SCORE->";
+
+  // calculate size of score text using font size specified
+  TTF_SizeText(font, &score[0], &text_rect.w, &text_rect.h);
+  text_rect.x = 400 - text_rect.w/2;
 
   text_surf = TTF_RenderText_Solid(font, score, text_color);
   text_texture = SDL_CreateTextureFromSurface(ge->renderer, text_surf);
