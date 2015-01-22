@@ -2,10 +2,14 @@ controls:
 figure out max shot_dt cap, if any?
 
 scoring:
-add font display
+find new ttf font that fits the game appropriately
+position <- Score -> correctly at top of screen
 show player points using fonts at top of screen
 
 gameplay:
+give player 2 his own force rect
+don't let space move cannons during a live shot
+kill a shot if it goes off left or right side of screen
 don't let dead cannon shoot
 respawn cannons some time after death
 
@@ -83,3 +87,4 @@ gameplay:
 scoring:
 -store player points
 -give points when one player shoots another
+-add font display capability

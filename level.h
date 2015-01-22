@@ -1,6 +1,8 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <vector>
 #include "gamestate.h"
 #include "terrain.h"
@@ -43,6 +45,12 @@ private:
   SDL_Rect force_rect;
 
   bool is_player1;
+
+  SDL_Texture* text_texture;
+  TTF_Font *font;
+  SDL_Surface* text_surf;
+  SDL_Rect text_rect;
+  SDL_Color text_color;
 };
 
 #endif
