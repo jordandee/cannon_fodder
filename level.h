@@ -9,6 +9,7 @@
 #include "timer.h"
 #include "cannon.h"
 #include "ball.h"
+#include "score.h"
 
 class Level : public GameState
 {
@@ -46,11 +47,7 @@ private:
 
   bool is_player1;
 
-  SDL_Texture* text_texture;
-  TTF_Font *font;
-  SDL_Surface* text_surf;
-  SDL_Rect text_rect;
-  SDL_Color text_color;
+  Score score;
 };
 
 #endif

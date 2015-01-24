@@ -2,7 +2,6 @@ controls:
 figure out max shot_dt cap, if any?
 
 scoring:
-refactor score code into a class
 show player points using fonts at top of screen
 
 gameplay:
@@ -92,3 +91,4 @@ scoring:
 -add font display capability
 -find new ttf font that fits the game appropriately
 -position <- Score -> correctly at top of screen
+-refactor score code into a class

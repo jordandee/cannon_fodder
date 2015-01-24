@@ -3,7 +3,7 @@
 CC=g++
 CFLAGS=-c -std=c++11
 LIBS=-lSDL2 -lSDL2_image -lSDL2_ttf
-SOURCES=main.cpp gameengine.cpp title.cpp level.cpp terrain.cpp math.cpp resources.cpp globals.cpp timer.cpp cannon.cpp ball.cpp
+SOURCES=main.cpp gameengine.cpp title.cpp level.cpp terrain.cpp math.cpp resources.cpp globals.cpp timer.cpp cannon.cpp ball.cpp score.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 TARGET=cannon_fodder.out
 

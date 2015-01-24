@@ -9,6 +9,7 @@
 #include "timer.h"
 #include "cannon.h"
 #include "ball.h"
+#include "score.h"
 #include "level.h"
 
 Level Level::_s;
@@ -60,31 +61,12 @@ void Level::init(GameEngine* ge)
   scoreL = 0;
   scoreR = 0;
 
-  text_texture = NULL;
-  font = NULL;
-  font = TTF_OpenFont("fonts/Chicago.ttf", 12);
-  text_surf = NULL;
-  text_rect = {0,5,0,0};
-  text_color = {0,0,0};
-
-  char score[10] = "<-SCORE->";
-
-  // calculate size of score text using font size specified
-  TTF_SizeText(font, &score[0], &text_rect.w, &text_rect.h);
-  text_rect.x = 400 - text_rect.w/2;
-
-  text_surf = TTF_RenderText_Solid(font, score, text_color);
-  text_texture = SDL_CreateTextureFromSurface(ge->renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
+  score.init(ge->renderer);
 }
 
 void Level::quit()
 {
   SDL_DestroyTexture(force_texture);
-
-  SDL_DestroyTexture(text_texture);
-  TTF_CloseFont(font);
 }
 
 void Level::handleEvents(GameEngine* ge)
@@ -213,7 +195,7 @@ void Level::render(GameEngine* ge)
   if (shot_dt != 0.0)
     SDL_RenderCopy(ge->renderer, force_texture, NULL, &force_rect);
 
-  SDL_RenderCopy(ge->renderer, text_texture, NULL, &text_rect);
+  score.render(ge->renderer);
 
   SDL_RenderPresent(ge->renderer);
 }
