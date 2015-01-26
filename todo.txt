@@ -1,19 +1,21 @@
-controls:
-figure out max shot_dt cap, if any?
-
-scoring:
-show player points using fonts at top of screen
-
 gameplay:
 give player 2 his own force rect
 don't let space move cannons during a live shot
 kill a shot if it goes off left or right side of screen
 don't let dead cannon shoot
 respawn cannons some time after death
+change maps after certain # of wins? or each win?
+add obstacles to maps - trees and hospitals
 
 menu:
 add simple menu with background picture (screenshot + title ?)
 add text box for each option: vs player, vs ai, options, exit
+
+controls:
+figure out max shot_dt cap, if any?
+
+polish?:
+optimize framerate if <120
 
 bugs??:
 after adding second slope type, game sometimes slow to close
@@ -92,3 +94,4 @@ scoring:
 -find new ttf font that fits the game appropriately
 -position <- Score -> correctly at top of screen
 -refactor score code into a class
+-show player points using fonts at top of screen
