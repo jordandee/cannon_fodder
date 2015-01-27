@@ -84,30 +84,38 @@ void Level::handleEvents(GameEngine* ge)
 
   if (state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT])
   {
-    if (is_player1)
-      cannonL.incrementAngle(5.0);
-    else
-      cannonR.incrementAngle(5.0);
+    if (ball.isDead())
+    {
+      if (is_player1)
+        cannonL.incrementAngle(5.0);
+      else
+        cannonR.incrementAngle(5.0);
+    }
   }
   if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT])
   {
-    if (is_player1)
-      cannonL.incrementAngle(-5.0);
-    else
-      cannonR.incrementAngle(-5.0);
+    if (ball.isDead())
+    {
+      if (is_player1)
+        cannonL.incrementAngle(-5.0);
+      else
+        cannonR.incrementAngle(-5.0);
+    }
   }
   if (state[SDL_SCANCODE_SPACE])
   {
-    if (!shooting)
+    if (ball.isDead())
     {
-      //std::cout << "space\n";
-      shooting = true;
-      shot_dt = 0.0;
-      shot_timer.start();
-    }
-    else
-    {
-      shot_dt = shot_timer.getTime();
+      if (!shooting)
+      {
+        shooting = true;
+        shot_dt = 0.0;
+        shot_timer.start();
+      }
+      else
+      {
+        shot_dt = shot_timer.getTime();
+      }
     }
   }
   else
@@ -117,7 +125,6 @@ void Level::handleEvents(GameEngine* ge)
       keyup_frames++; // synergy hack, synergy creates false positive keyups
       if (keyup_frames >= 5)
       {
-        //std::cout << "space up\n";
         shooting = false;
         shot_dt = shot_timer.getTime();
         std::cout << "shot_dt: " << shot_dt << "\n";
@@ -138,26 +145,31 @@ void Level::update()
   dt = timer.getTime();
   timer.start();
 
-  ball.update(dt);
-  if (ball.checkTerrainCollision(terrain))
-    is_player1 = !is_player1;
-
-  if (is_player1)
+  if (!ball.isDead())
   {
-    if (ball.checkCannonCollision(cannonR.getRect()))
+    ball.update(dt);
+    if (ball.checkTerrainCollision(terrain))
     {
-      cannonR.die();
-      score.playerLScores(10);
       is_player1 = !is_player1;
     }
-  }
-  else
-  {
-    if (ball.checkCannonCollision(cannonL.getRect()))
+
+    if (is_player1)
     {
-      cannonL.die();
-      score.playerRScores(10);
-      is_player1 = !is_player1;
+      if (ball.checkCannonCollision(cannonR.getRect()))
+      {
+        cannonR.die();
+        score.playerLScores(10);
+        is_player1 = !is_player1;
+      }
+    }
+    else
+    {
+      if (ball.checkCannonCollision(cannonL.getRect()))
+      {
+        cannonL.die();
+        score.playerRScores(10);
+        is_player1 = !is_player1;
+      }
     }
   }
 
@@ -194,7 +206,7 @@ void Level::render(GameEngine* ge)
 
   ball.render(ge->renderer);
 
-  if (shot_dt != 0.0)
+  if (shooting)
     SDL_RenderCopy(ge->renderer, force_texture, NULL, &force_rect);
 
   score.render(ge->renderer);

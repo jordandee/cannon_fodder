@@ -38,7 +38,7 @@ private:
   Timer timer, shot_timer;
   double dt;
   double shot_dt;
-  bool shooting;
+  bool shooting, shot_live;
   int keyup_frames;
 
   SDL_Texture* force_texture;

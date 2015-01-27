@@ -94,6 +94,13 @@ bool Ball::checkTerrainCollision(std::vector<Pixel>& terrain)
 {
   bool collision_detected = false;
 
+  // check screen border first
+  if (x + BALL_WIDTH < 0 || x > 800)
+  {
+    collision_detected = true;
+    alive = false;
+  }
+
   auto it = terrain.begin();
   while (it != terrain.end() && !collision_detected)
   {

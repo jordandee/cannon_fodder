@@ -1,7 +1,4 @@
 gameplay:
-don't let keys move cannons during a live shot
-don't let cannon reshoot when already shooting
-kill a shot if it goes off left or right side of screen
 don't let dead cannon shoot
 respawn cannons some time after death
 change maps after certain # of wins? or each win?
@@ -102,3 +99,6 @@ scoring:
 
 gameplay:
 -give player 2 his own force rect
+-don't let keys move cannons during a live shot
+-don't let cannon reshoot when already shooting
+-kill a shot if it goes off left or right side of screen
