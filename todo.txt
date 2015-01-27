@@ -1,6 +1,6 @@
 gameplay:
-give player 2 his own force rect
-don't let space move cannons during a live shot
+don't let keys move cannons during a live shot
+don't let cannon reshoot when already shooting
 kill a shot if it goes off left or right side of screen
 don't let dead cannon shoot
 respawn cannons some time after death
@@ -19,6 +19,10 @@ optimize framerate if <120
 
 bugs??:
 after adding second slope type, game sometimes slow to close
+
+compiling:
+xcc for windows, mxe cc?
+xcc for web js, emscripten?
 
 would be nice:
 get ChicagoBold font since I believe that was used in the original game
@@ -95,3 +99,6 @@ scoring:
 -position <- Score -> correctly at top of screen
 -refactor score code into a class
 -show player points using fonts at top of screen
+
+gameplay:
+-give player 2 his own force rect

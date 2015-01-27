@@ -54,7 +54,7 @@ void Level::init(GameEngine* ge)
   force_rect.w = 4;
   force_rect.h = 16;
   force_rect.x = 10;
-  force_rect.y = 10;
+  force_rect.y = 20;
 
   is_player1 = true;
 
@@ -166,6 +166,11 @@ void Level::update()
     force_rect.w = min_shot_dt * 64;
   else
     force_rect.w = shot_dt * 64;
+
+  if (is_player1)
+    force_rect.x = 10;
+  else
+    force_rect.x = 790 - force_rect.w;
 }
 
 void Level::render(GameEngine* ge)
