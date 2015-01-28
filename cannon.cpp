@@ -102,3 +102,7 @@ void Cannon::die()
 {
   alive = false;
 }
+void Cannon::live()
+{
+  alive = true;
+}

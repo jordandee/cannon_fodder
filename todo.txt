@@ -1,7 +1,4 @@
 gameplay:
-don't let dead cannon shoot
-respawn cannons some time after death
-change maps after certain # of wins? or each win?
 add obstacles to maps - trees and hospitals
 
 menu:
@@ -102,3 +99,5 @@ gameplay:
 -don't let keys move cannons during a live shot
 -don't let cannon reshoot when already shooting
 -kill a shot if it goes off left or right side of screen
+-don't let dead cannon shoot
+-regenerate terrain and respawn cannons some time after cannon death

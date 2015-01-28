@@ -10,6 +10,7 @@
 #include "cannon.h"
 #include "ball.h"
 #include "score.h"
+#include "math.h"
 #include "level.h"
 
 Level Level::_s;
@@ -18,29 +19,10 @@ void Level::init(GameEngine* ge)
 {
   timer.start();
 
-  generateTerrain(terrain);
-
   cannonL.init(ge->renderer, false);
-
-  // find placement for left cannon, top ground pixel at randomized x
-  auto lt = std::find_if(terrain.begin(), terrain.end(), isTopPixelL);
-  //std::cout << lt->x << " " << lt->y << " " << std::endl;
-
-  cannonL.setPosition(lt->x, lt->y - CANNON_HEIGHT);
-
-  // make sure cannon sits on terrain properly and does not overlap it
-  fixTerrain(terrain, lt->x, lt->y);
-
   cannonR.init(ge->renderer, true);
 
-  // find placement for right cannon
-  auto rt = std::find_if(terrain.begin(), terrain.end(), isTopPixelR);
-  //std::cout << rt->x << " " << rt->y << " " << std::endl;
-
-  cannonR.setPosition(rt->x, rt->y - CANNON_HEIGHT);
-
-  // make sure cannon sits on terrain properly and does not overlap it
-  fixTerrain(terrain, rt->x, rt->y);
+  spawnLevel();
 
   ball.init(ge->renderer);
 
@@ -59,6 +41,43 @@ void Level::init(GameEngine* ge)
   is_player1 = true;
 
   score.init(ge->renderer);
+}
+
+void Level::spawnLevel()
+{
+  generateTerrain(terrain);
+
+  cannonL.live();
+  cannonR.live();
+  is_a_player_dead = false;
+
+  // find placement for left cannon, top ground pixel at randomized x
+  int cannonL_x = 150 + nrand(100);
+  auto lt = std::find_if(terrain.begin(), terrain.end(),
+      [&cannonL_x](Pixel p)
+      {
+        if (p.x == cannonL_x && p.status)
+          return true;
+        else
+          return false;
+      });
+
+  cannonL.setPosition(lt->x, lt->y - CANNON_HEIGHT);
+  fixTerrain(terrain, lt->x, lt->y);
+
+  // find placement for right cannon, top ground pixel at randomized x
+  int cannonR_x = 550 + nrand(100);
+  auto rt = std::find_if(terrain.begin(), terrain.end(),
+      [&cannonR_x](Pixel p)
+      {
+        if (p.x == cannonR_x && p.status)
+          return true;
+        else
+          return false;
+      });
+
+  cannonR.setPosition(rt->x, rt->y - CANNON_HEIGHT);
+  fixTerrain(terrain, rt->x, rt->y);
 }
 
 void Level::quit()
@@ -127,7 +146,7 @@ void Level::handleEvents(GameEngine* ge)
       {
         shooting = false;
         shot_dt = shot_timer.getTime();
-        std::cout << "shot_dt: " << shot_dt << "\n";
+        //std::cout << "shot_dt: " << shot_dt << "\n";
         keyup_frames = 0;
 
         if (is_player1)
@@ -160,6 +179,8 @@ void Level::update()
         cannonR.die();
         score.playerLScores(10);
         is_player1 = !is_player1;
+        respawn_timer.start();
+        is_a_player_dead = true;
       }
     }
     else
@@ -169,6 +190,8 @@ void Level::update()
         cannonL.die();
         score.playerRScores(10);
         is_player1 = !is_player1;
+        respawn_timer.start();
+        is_a_player_dead = true;
       }
     }
   }
@@ -189,6 +212,9 @@ void Level::render(GameEngine* ge)
 {
   SDL_SetRenderDrawColor(ge->renderer, 0xff, 0xff, 0xff, 0);
   SDL_RenderClear(ge->renderer);
+
+  if (is_a_player_dead && respawn_timer.getTime() > 3.0)
+    spawnLevel();
 
   // draw terrain
   // for some reason won't draw black (0,0,0,0) on white...

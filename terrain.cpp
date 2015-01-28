@@ -8,6 +8,8 @@
 void generateTerrain(std::vector<Pixel>& terrain)
 {
   // populate terrain vector with default flat terrain
+  bool create_vector = terrain.empty();
+  int i = 0;
   for (int y = 300; y < 600; ++y)
   {
     for (int x = 0; x < 800; ++x)
@@ -17,7 +19,10 @@ void generateTerrain(std::vector<Pixel>& terrain)
       p.y = y;
       p.status = 1;
 
-      terrain.push_back(p);
+      if (create_vector)
+        terrain.push_back(p);
+      else
+        terrain[i++] = p;
     }
   }
 
@@ -148,28 +153,10 @@ void generateTerrain(std::vector<Pixel>& terrain)
 
 }
 
-// return a pixel that the leftside of left cannon will sit on
-bool isTopPixelL(Pixel p)
-{
-  static int x = 150 + nrand(100);
-  if (p.x == x && p.status)
-    return true;
-  else
-    return false;
-}
-// return a pixel that the leftside of right cannon will sit on
-bool isTopPixelR(Pixel p)
-{
-  static int x = 550 + nrand(100);
-  if (p.x == x && p.status)
-    return true;
-  else
-    return false;
-}
-
-// take bottom left cannon coordinates
-// get rid of overlapping dirt and cannon
-// make sure cannon sits on dirt
+// make sure cannon sits on terrain properly and does not overlap it
+//  take bottom left cannon coordinates
+//  get rid of overlapping dirt and cannon
+//  make sure cannon sits on dirt
 void fixTerrain(std::vector<Pixel>& terrain, int bx, int by)
 {
   for (auto it = terrain.begin(); it != terrain.end(); ++it)

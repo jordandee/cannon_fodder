@@ -21,6 +21,8 @@ public:
   void update();
   void render(GameEngine* ge);
 
+  void spawnLevel();
+
   static Level* Instance() { return &_s; }
 
 protected:
@@ -35,7 +37,7 @@ private:
 
   Ball ball;
 
-  Timer timer, shot_timer;
+  Timer timer, shot_timer, respawn_timer;
   double dt;
   double shot_dt;
   bool shooting, shot_live;
@@ -44,7 +46,7 @@ private:
   SDL_Texture* force_texture;
   SDL_Rect force_rect;
 
-  bool is_player1;
+  bool is_player1, is_a_player_dead;
 
   Score score;
 };

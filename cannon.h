@@ -25,6 +25,7 @@ class Cannon
     SDL_Rect* getRect();
 
     void die();
+    void live();
 
   private:
     bool alive;
