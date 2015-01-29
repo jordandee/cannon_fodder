@@ -10,6 +10,7 @@
 #include "cannon.h"
 #include "ball.h"
 #include "score.h"
+#include "obstacle.h"
 
 class Level : public GameState
 {
@@ -32,6 +33,7 @@ private:
   static Level _s;
 
   std::vector<Pixel> terrain;
+  std::vector<Obstacle> obstacles;
 
   Cannon cannonL, cannonR;
 
@@ -49,9 +51,6 @@ private:
   bool is_player1, is_a_player_dead;
 
   Score score;
-
-  SDL_Texture* hospital_texture;
-  SDL_Rect hospital_rect;
 };
 
 #endif

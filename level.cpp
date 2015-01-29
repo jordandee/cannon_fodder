@@ -11,6 +11,7 @@
 #include "ball.h"
 #include "score.h"
 #include "math.h"
+#include "obstacle.h"
 #include "level.h"
 
 Level Level::_s;
@@ -22,10 +23,17 @@ void Level::init(GameEngine* ge)
   cannonL.init(ge->renderer, false);
   cannonR.init(ge->renderer, true);
 
-  hospital_texture = NULL;
-  hospital_texture = loadTexture("images/hospital.png", ge->renderer);
-  hospital_rect.w = 28;
-  hospital_rect.h = 28;
+  for (int i = 0; i < 2; i++)
+  {
+    Obstacle obs;
+    obstacles.push_back(obs);
+  }
+  // why? have to init after pushing obstacle onto vector
+  //   otherwise one or more obstacles won't render
+  for (int i = 0; i < 2; i++)
+  {
+    obstacles[i].init(ge->renderer, i%2==1);
+  }
 
   spawnLevel();
 
@@ -88,7 +96,7 @@ void Level::spawnLevel()
   int hospitalL_x = nrand(400);
   while (!hospital_position_found)
   {
-    if (cannonL_x + CANNON_WIDTH < hospitalL_x || hospitalL_x + hospital_rect.w < cannonL_x)
+    if (cannonL_x + CANNON_WIDTH < hospitalL_x || hospitalL_x + HOSPITAL_WIDTH < cannonL_x)
       hospital_position_found = true;
     else
       hospitalL_x = nrand(400);
@@ -101,10 +109,28 @@ void Level::spawnLevel()
         else
           return false;
       });
-  cannonR.setPosition(rt->x, rt->y - CANNON_HEIGHT);
-  hospital_rect.x = ht->x;
-  hospital_rect.y = ht->y - hospital_rect.h;
+  obstacles[0].setPosition(ht->x, ht->y - HOSPITAL_HEIGHT);
   fixTerrain(terrain, ht->x, ht->y);
+
+  hospital_position_found = false;
+  int hospitalR_x = 400 + nrand(400);
+  while (!hospital_position_found)
+  {
+    if (cannonR_x + CANNON_WIDTH < hospitalR_x || hospitalR_x + HOSPITAL_WIDTH < cannonR_x)
+      hospital_position_found = true;
+    else
+      hospitalR_x = 400 + nrand(400);
+  }
+  auto htR = std::find_if(terrain.begin(), terrain.end(),
+      [&hospitalR_x](Pixel p)
+      {
+        if (p.x == hospitalR_x && p.status)
+          return true;
+        else
+          return false;
+      });
+  obstacles[1].setPosition(htR->x, htR->y - HOSPITAL_HEIGHT);
+  fixTerrain(terrain, htR->x, htR->y);
 }
 
 void Level::quit()
@@ -257,7 +283,8 @@ void Level::render(GameEngine* ge)
   cannonL.render(ge->renderer);
   cannonR.render(ge->renderer);
 
-  SDL_RenderCopy(ge->renderer, hospital_texture, NULL, &hospital_rect);
+  for (auto it = obstacles.begin(); it != obstacles.end(); ++it)
+    it->render(ge->renderer);
 
   ball.render(ge->renderer);
 
