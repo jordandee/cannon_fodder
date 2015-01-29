@@ -22,6 +22,11 @@ void Level::init(GameEngine* ge)
   cannonL.init(ge->renderer, false);
   cannonR.init(ge->renderer, true);
 
+  hospital_texture = NULL;
+  hospital_texture = loadTexture("images/hospital.png", ge->renderer);
+  hospital_rect.w = 28;
+  hospital_rect.h = 28;
+
   spawnLevel();
 
   ball.init(ge->renderer);
@@ -78,6 +83,28 @@ void Level::spawnLevel()
 
   cannonR.setPosition(rt->x, rt->y - CANNON_HEIGHT);
   fixTerrain(terrain, rt->x, rt->y);
+
+  bool hospital_position_found = false;
+  int hospitalL_x = nrand(400);
+  while (!hospital_position_found)
+  {
+    if (cannonL_x + CANNON_WIDTH < hospitalL_x || hospitalL_x + hospital_rect.w < cannonL_x)
+      hospital_position_found = true;
+    else
+      hospitalL_x = nrand(400);
+  }
+  auto ht = std::find_if(terrain.begin(), terrain.end(),
+      [&hospitalL_x](Pixel p)
+      {
+        if (p.x == hospitalL_x && p.status)
+          return true;
+        else
+          return false;
+      });
+  cannonR.setPosition(rt->x, rt->y - CANNON_HEIGHT);
+  hospital_rect.x = ht->x;
+  hospital_rect.y = ht->y - hospital_rect.h;
+  fixTerrain(terrain, ht->x, ht->y);
 }
 
 void Level::quit()
@@ -229,6 +256,8 @@ void Level::render(GameEngine* ge)
 
   cannonL.render(ge->renderer);
   cannonR.render(ge->renderer);
+
+  SDL_RenderCopy(ge->renderer, hospital_texture, NULL, &hospital_rect);
 
   ball.render(ge->renderer);
 

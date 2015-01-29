@@ -49,6 +49,9 @@ private:
   bool is_player1, is_a_player_dead;
 
   Score score;
+
+  SDL_Texture* hospital_texture;
+  SDL_Rect hospital_rect;
 };
 
 #endif

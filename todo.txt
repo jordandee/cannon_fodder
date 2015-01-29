@@ -1,5 +1,9 @@
-gameplay:
-add obstacles to maps - trees and hospitals
+terrain generation:
+add second flipped hospital to terrain gen
+figure out how to handle obstacles more easily, vector of obstacle objects?
+add one house to terrain gen, add both
+add trees to terrain gen
+add randomized obstacles based on settings - trees, houses and hospitals
 
 menu:
 add simple menu with background picture (screenshot + title ?)
@@ -101,3 +105,7 @@ gameplay:
 -kill a shot if it goes off left or right side of screen
 -don't let dead cannon shoot
 -regenerate terrain and respawn cannons some time after cannon death
+
+terrain generation:
+-create hospital, house and tree textures
+-add one hospital to terrain gen
