@@ -1,6 +1,9 @@
 #include <SDL2/SDL.h>
+#include <vector>
 #include <iostream>
 #include "resources.h"
+#include "math.h"
+#include "terrain.h"
 #include "obstacle.h"
 
 Obstacle::Obstacle()
@@ -13,16 +16,24 @@ Obstacle::~Obstacle()
   SDL_DestroyTexture(obstacle_texture);
 }
 
-void Obstacle::init(SDL_Renderer* renderer, bool flipped)
+void Obstacle::init(SDL_Renderer* renderer, Obstacle_Type type, bool flipped)
 {
   alive = true;
 
   is_flipped = flipped;
 
-  obstacle_texture = loadTexture("images/hospital.png", renderer);
-
-  obstacle_rect.w = HOSPITAL_WIDTH;
-  obstacle_rect.h = HOSPITAL_HEIGHT;
+  if (type == HOSPITAL)
+  {
+    obstacle_texture = loadTexture("images/hospital.png", renderer);
+    obstacle_rect.w = HOSPITAL_WIDTH;
+    obstacle_rect.h = HOSPITAL_HEIGHT;
+  }
+  else if (type == HOUSE)
+  {
+    obstacle_texture = loadTexture("images/house.png", renderer);
+    obstacle_rect.w = HOUSE_WIDTH;
+    obstacle_rect.h = HOUSE_HEIGHT;
+  }
 }
 
 void Obstacle::update()
@@ -42,6 +53,31 @@ void Obstacle::render(SDL_Renderer* renderer)
       SDL_RenderCopyEx(renderer, obstacle_texture, NULL, &obstacle_rect, 0, NULL, SDL_FLIP_HORIZONTAL);
     }
   }
+}
+
+void Obstacle::findPosition(std::vector<Pixel>& terrain, std::vector<SDL_Rect *> rects)
+{
+  bool position_found = false;
+
+  int x;
+  while (!position_found)
+  {
+    if (is_flipped == !FLIPPED)
+      x = nrand(400 - obstacle_rect.w);
+    else
+      x = 400 + nrand(400 - obstacle_rect.w);
+
+    position_found = true;
+    for (auto it = rects.begin(); it != rects.end(); ++it)
+    {
+      if (!((*it)->x + (*it)->w < x || x + obstacle_rect.w < (*it)->x))
+        position_found &= false;
+    }
+  }
+  int y = findTopGroundPixel(terrain, x);
+
+  setPosition(x, y - obstacle_rect.w);
+  fixTerrain(terrain, x, y);
 }
 
 void Obstacle::setPosition(int x, int y)

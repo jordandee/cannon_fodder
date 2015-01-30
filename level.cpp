@@ -23,17 +23,17 @@ void Level::init(GameEngine* ge)
   cannonL.init(ge->renderer, false);
   cannonR.init(ge->renderer, true);
 
-  for (int i = 0; i < 2; i++)
+  for (int i = 0; i < 4; i++)
   {
     Obstacle obs;
     obstacles.push_back(obs);
   }
   // why? have to init after pushing obstacle onto vector
   //   otherwise one or more obstacles won't render
-  for (int i = 0; i < 2; i++)
-  {
-    obstacles[i].init(ge->renderer, i%2==1);
-  }
+  obstacles[0].init(ge->renderer, HOSPITAL, !FLIPPED);
+  obstacles[1].init(ge->renderer, HOSPITAL, FLIPPED);
+  obstacles[2].init(ge->renderer, HOUSE, !FLIPPED);
+  obstacles[3].init(ge->renderer, HOUSE, FLIPPED);
 
   spawnLevel();
 
@@ -92,45 +92,17 @@ void Level::spawnLevel()
   cannonR.setPosition(rt->x, rt->y - CANNON_HEIGHT);
   fixTerrain(terrain, rt->x, rt->y);
 
-  bool hospital_position_found = false;
-  int hospitalL_x = nrand(400);
-  while (!hospital_position_found)
-  {
-    if (cannonL_x + CANNON_WIDTH < hospitalL_x || hospitalL_x + HOSPITAL_WIDTH < cannonL_x)
-      hospital_position_found = true;
-    else
-      hospitalL_x = nrand(400);
-  }
-  auto ht = std::find_if(terrain.begin(), terrain.end(),
-      [&hospitalL_x](Pixel p)
-      {
-        if (p.x == hospitalL_x && p.status)
-          return true;
-        else
-          return false;
-      });
-  obstacles[0].setPosition(ht->x, ht->y - HOSPITAL_HEIGHT);
-  fixTerrain(terrain, ht->x, ht->y);
 
-  hospital_position_found = false;
-  int hospitalR_x = 400 + nrand(400);
-  while (!hospital_position_found)
+  // find positions for obstacles
+  // make sure they don't collide with cannons or themselves
+  std::vector<SDL_Rect *> rects;
+  rects.push_back(cannonL.getRect());
+  rects.push_back(cannonR.getRect());
+  for (int i = 0; i < 4; i++)
   {
-    if (cannonR_x + CANNON_WIDTH < hospitalR_x || hospitalR_x + HOSPITAL_WIDTH < cannonR_x)
-      hospital_position_found = true;
-    else
-      hospitalR_x = 400 + nrand(400);
+    obstacles[i].findPosition(terrain, rects);
+    rects.push_back(obstacles[i].getRect());
   }
-  auto htR = std::find_if(terrain.begin(), terrain.end(),
-      [&hospitalR_x](Pixel p)
-      {
-        if (p.x == hospitalR_x && p.status)
-          return true;
-        else
-          return false;
-      });
-  obstacles[1].setPosition(htR->x, htR->y - HOSPITAL_HEIGHT);
-  fixTerrain(terrain, htR->x, htR->y);
 }
 
 void Level::quit()

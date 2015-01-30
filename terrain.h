@@ -14,6 +14,7 @@ struct Pixel
 
 void generateTerrain(std::vector<Pixel>& terrain);
 
+int findTopGroundPixel(std::vector<Pixel>& terrain, int x);
 void fixTerrain(std::vector<Pixel>& terrain, int bx, int by);
 
 bool checkTerrainCollision(SDL_Rect* ball, std::vector<Pixel>& terrain);

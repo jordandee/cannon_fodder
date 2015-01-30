@@ -1,5 +1,5 @@
 terrain generation:
-add one house to terrain gen, add both
+fix terrain gen so there is always dirt at every y so obstacles don't fail to spawn
 add trees to terrain gen
 add randomized obstacles based on settings - trees, houses and hospitals
 
@@ -109,3 +109,4 @@ terrain generation:
 -add one hospital to terrain gen
 -add second flipped hospital to terrain gen
 -figure out how to handle obstacles more easily, vector of obstacle objects?
+-add one house to terrain gen, add both

@@ -150,7 +150,20 @@ void generateTerrain(std::vector<Pixel>& terrain)
       }
     }
   }
+}
 
+int findTopGroundPixel(std::vector<Pixel>& terrain, int x)
+{
+  int y = 0;
+  for (auto it = terrain.begin(); it != terrain.end(); ++it)
+  {
+    if (it->x == x && it->status)
+    {
+      y = it->y;
+      break;
+    }
+  }
+  return y;
 }
 
 // make sure cannon sits on terrain properly and does not overlap it
