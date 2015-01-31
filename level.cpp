@@ -110,7 +110,8 @@ void Level::spawnLevel()
   for (int i = 0; i < gObstacleTotal; i++)
   {
     obstacles[i].findPosition(terrain, rects);
-    rects.push_back(obstacles[i].getRect());
+    if (i < 10) // don't worry about trees colliding after 10+ obstacles
+      rects.push_back(obstacles[i].getRect());
   }
 }
 

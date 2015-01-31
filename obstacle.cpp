@@ -68,7 +68,9 @@ void Obstacle::findPosition(std::vector<Pixel>& terrain, std::vector<SDL_Rect *>
   int x;
   while (!position_found)
   {
-    if (is_flipped == !FLIPPED)
+    if (type == TREE)
+      x = nrand(800);
+    else if (is_flipped == !FLIPPED)
       x = nrand(400 - obstacle_rect.w);
     else
       x = 400 + nrand(400 - obstacle_rect.w);

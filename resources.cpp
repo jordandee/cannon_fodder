@@ -36,6 +36,7 @@ SDL_Texture* loadTexture(const char* filepath, SDL_Renderer* renderer)
   }
   else
   {
+    SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0xFF, 0xFF, 0xFF));
     newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
     if (newTexture == NULL)
     {
