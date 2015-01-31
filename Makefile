@@ -1,7 +1,8 @@
 #Getting fancier with dem makes
 
 CC=g++
-CFLAGS=-c -std=c++11
+#-g is -g2, for getting info for debugger, -g3 gets more info
+CFLAGS=-c -std=c++11 -g
 LIBS=-lSDL2 -lSDL2_image -lSDL2_ttf
 SOURCES=main.cpp gameengine.cpp title.cpp level.cpp terrain.cpp math.cpp resources.cpp globals.cpp timer.cpp cannon.cpp ball.cpp score.cpp obstacle.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
