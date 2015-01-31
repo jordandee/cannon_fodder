@@ -1,5 +1,6 @@
 terrain generation:
-add randomized obstacles based on settings - trees, houses and hospitals
+make it so trees can spawn overlapping, need transparency
+make it so trees can spawn anywhere regardless of flip setting
 
 menu:
 add simple menu with background picture (screenshot + title ?)
@@ -110,3 +111,4 @@ terrain generation:
 -add one house to terrain gen, add both
 -fix terrain gen so there is always dirt at every y so obstacles don't fail to spawn (add minimum y floor value that has to be dirt)
 -add trees to terrain gen
+-make # of obstacles based on global settings - trees, houses and hospitals

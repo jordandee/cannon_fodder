@@ -12,6 +12,7 @@
 #include "score.h"
 #include "math.h"
 #include "obstacle.h"
+#include "globals.h"
 #include "level.h"
 
 Level Level::_s;
@@ -23,25 +24,25 @@ void Level::init(GameEngine* ge)
   cannonL.init(ge->renderer, false);
   cannonR.init(ge->renderer, true);
 
-  for (int i = 0; i < 12; i++)
+  for (int i = 0; i < gObstacleTotal; i++)
   {
     Obstacle obs;
     obstacles.push_back(obs);
   }
   // why? have to init after pushing obstacle onto vector
   //   otherwise one or more obstacles won't render
-  obstacles[0].init(ge->renderer, HOSPITAL, !FLIPPED);
-  obstacles[1].init(ge->renderer, HOSPITAL, FLIPPED);
-  obstacles[2].init(ge->renderer, HOUSE, !FLIPPED);
-  obstacles[3].init(ge->renderer, HOUSE, FLIPPED);
-  obstacles[4].init(ge->renderer, TREE, !FLIPPED);
-  obstacles[5].init(ge->renderer, TREE, FLIPPED);
-  obstacles[6].init(ge->renderer, TREE, !FLIPPED);
-  obstacles[7].init(ge->renderer, TREE, FLIPPED);
-  obstacles[8].init(ge->renderer, TREE, !FLIPPED);
-  obstacles[9].init(ge->renderer, TREE, FLIPPED);
-  obstacles[10].init(ge->renderer, TREE, !FLIPPED);
-  obstacles[11].init(ge->renderer, TREE, FLIPPED);
+  for (int i = 0; i < gObstacleTotal; ++i)
+  {
+    bool is_flipped = (i % 2 == 1);
+    Obstacle_Type obstacle_type;
+    switch (i)
+    {
+      case 0: case 1: obstacle_type = HOSPITAL; break;
+      case 2: case 3: obstacle_type = HOUSE; break;
+      default: obstacle_type = TREE; break;
+    }
+    obstacles[i].init(ge->renderer, obstacle_type, is_flipped);
+  }
 
   spawnLevel();
 
@@ -106,7 +107,7 @@ void Level::spawnLevel()
   std::vector<SDL_Rect *> rects;
   rects.push_back(cannonL.getRect());
   rects.push_back(cannonR.getRect());
-  for (int i = 0; i < 12; i++)
+  for (int i = 0; i < gObstacleTotal; i++)
   {
     obstacles[i].findPosition(terrain, rects);
     rects.push_back(obstacles[i].getRect());

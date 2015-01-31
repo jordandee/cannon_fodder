@@ -1,1 +1,2 @@
 terrain_type 4
+obstacles 20

@@ -18,6 +18,8 @@ void loadSettings()
   {
     if (s == "terrain_type")
       gTerrainType = n;
+    if (s == "obstacles")
+      gObstacleTotal = n;
   }
   ifs.close();
 }
