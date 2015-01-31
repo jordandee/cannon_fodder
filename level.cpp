@@ -23,7 +23,7 @@ void Level::init(GameEngine* ge)
   cannonL.init(ge->renderer, false);
   cannonR.init(ge->renderer, true);
 
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 12; i++)
   {
     Obstacle obs;
     obstacles.push_back(obs);
@@ -34,6 +34,14 @@ void Level::init(GameEngine* ge)
   obstacles[1].init(ge->renderer, HOSPITAL, FLIPPED);
   obstacles[2].init(ge->renderer, HOUSE, !FLIPPED);
   obstacles[3].init(ge->renderer, HOUSE, FLIPPED);
+  obstacles[4].init(ge->renderer, TREE, !FLIPPED);
+  obstacles[5].init(ge->renderer, TREE, FLIPPED);
+  obstacles[6].init(ge->renderer, TREE, !FLIPPED);
+  obstacles[7].init(ge->renderer, TREE, FLIPPED);
+  obstacles[8].init(ge->renderer, TREE, !FLIPPED);
+  obstacles[9].init(ge->renderer, TREE, FLIPPED);
+  obstacles[10].init(ge->renderer, TREE, !FLIPPED);
+  obstacles[11].init(ge->renderer, TREE, FLIPPED);
 
   spawnLevel();
 
@@ -65,32 +73,32 @@ void Level::spawnLevel()
   is_a_player_dead = false;
 
   // find placement for left cannon, top ground pixel at randomized x
-  int cannonL_x = 150 + nrand(100);
+  int cannonL_cx = 150 + nrand(100); // center x of cannon
   auto lt = std::find_if(terrain.begin(), terrain.end(),
-      [&cannonL_x](Pixel p)
+      [&cannonL_cx](Pixel p)
       {
-        if (p.x == cannonL_x && p.status)
+        if (p.x == cannonL_cx && p.status)
           return true;
         else
           return false;
       });
 
-  cannonL.setPosition(lt->x, lt->y - CANNON_HEIGHT);
-  fixTerrain(terrain, lt->x, lt->y);
+  cannonL.setPosition(cannonL_cx - CANNON_WIDTH/2, lt->y - CANNON_HEIGHT);
+  fixTerrain(terrain, cannonL.getRect());
 
   // find placement for right cannon, top ground pixel at randomized x
-  int cannonR_x = 550 + nrand(100);
+  int cannonR_cx = 550 + nrand(100);
   auto rt = std::find_if(terrain.begin(), terrain.end(),
-      [&cannonR_x](Pixel p)
+      [&cannonR_cx](Pixel p)
       {
-        if (p.x == cannonR_x && p.status)
+        if (p.x == cannonR_cx && p.status)
           return true;
         else
           return false;
       });
 
-  cannonR.setPosition(rt->x, rt->y - CANNON_HEIGHT);
-  fixTerrain(terrain, rt->x, rt->y);
+  cannonR.setPosition(cannonR_cx - CANNON_WIDTH/2, rt->y - CANNON_HEIGHT);
+  fixTerrain(terrain, cannonR.getRect());
 
 
   // find positions for obstacles
@@ -98,7 +106,7 @@ void Level::spawnLevel()
   std::vector<SDL_Rect *> rects;
   rects.push_back(cannonL.getRect());
   rects.push_back(cannonR.getRect());
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 12; i++)
   {
     obstacles[i].findPosition(terrain, rects);
     rects.push_back(obstacles[i].getRect());
@@ -241,6 +249,8 @@ void Level::render(GameEngine* ge)
   if (is_a_player_dead && respawn_timer.getTime() > 3.0)
     spawnLevel();
 
+  for (auto it = obstacles.begin(); it != obstacles.end(); ++it)
+    it->render(ge->renderer);
   // draw terrain
   // for some reason won't draw black (0,0,0,0) on white...
   SDL_SetRenderDrawColor(ge->renderer, 0x00, 0x00, 0x00, 1);
@@ -255,8 +265,6 @@ void Level::render(GameEngine* ge)
   cannonL.render(ge->renderer);
   cannonR.render(ge->renderer);
 
-  for (auto it = obstacles.begin(); it != obstacles.end(); ++it)
-    it->render(ge->renderer);
 
   ball.render(ge->renderer);
 

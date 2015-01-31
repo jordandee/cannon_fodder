@@ -7,6 +7,7 @@
 
 void generateTerrain(std::vector<Pixel>& terrain)
 {
+  const double YFLOOR = 590.0;
   // populate terrain vector with default flat terrain
   bool create_vector = terrain.empty();
   int i = 0;
@@ -127,24 +128,28 @@ void generateTerrain(std::vector<Pixel>& terrain)
       if (it->x < x2)
       {
         double y = y1 + s1 * ((double)it->x - x1);
+        y = fmin(y, YFLOOR);
         if ((int)y >= it->y)
           it->status = 0;
       }
       else if (it->x < x3)
       {
         double y = y2 + s2 * ((double)it->x - x2);
+        y = fmin(y, YFLOOR);
         if ((int)y >= it->y)
           it->status = 0;
       }
       else if (it->x < x4)
       {
         double y = y3 + s3 * ((double)it->x - x3);
+        y = fmin(y, YFLOOR);
         if ((int)y >= it->y)
           it->status = 0;
       }
       else
       {
         double y = y4 + s4 * ((double)it->x - x4);
+        y = fmin(y, YFLOOR);
         if ((int)y >= it->y)
           it->status = 0;
       }
@@ -170,11 +175,23 @@ int findTopGroundPixel(std::vector<Pixel>& terrain, int x)
 //  take bottom left cannon coordinates
 //  get rid of overlapping dirt and cannon
 //  make sure cannon sits on dirt
-void fixTerrain(std::vector<Pixel>& terrain, int bx, int by)
+void fixTerrain(std::vector<Pixel>& terrain, SDL_Rect* rect)
 {
+  int bx = rect->x;
+  int by = rect->y + rect->h;
+  int bw = rect->w;
+
+  // only fix terrain under tree trunk
+  const int TREE_WIDTH = 13;
+  if (bw == TREE_WIDTH)
+  {
+    bx += 5;
+    bw = 3;
+  }
+
   for (auto it = terrain.begin(); it != terrain.end(); ++it)
   {
-    if (it->x >= bx && it->x < bx + 30)
+    if (it->x >= bx && it->x < bx + bw)
     {
       if (it->y < by)
         it->status = 0;

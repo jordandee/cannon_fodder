@@ -16,10 +16,10 @@ Obstacle::~Obstacle()
   SDL_DestroyTexture(obstacle_texture);
 }
 
-void Obstacle::init(SDL_Renderer* renderer, Obstacle_Type type, bool flipped)
+void Obstacle::init(SDL_Renderer* renderer, Obstacle_Type obs_type, bool flipped)
 {
+  type = obs_type;
   alive = true;
-
   is_flipped = flipped;
 
   if (type == HOSPITAL)
@@ -33,6 +33,12 @@ void Obstacle::init(SDL_Renderer* renderer, Obstacle_Type type, bool flipped)
     obstacle_texture = loadTexture("images/house.png", renderer);
     obstacle_rect.w = HOUSE_WIDTH;
     obstacle_rect.h = HOUSE_HEIGHT;
+  }
+  else if (type == TREE)
+  {
+    obstacle_texture = loadTexture("images/tree.png", renderer);
+    obstacle_rect.w = TREE_WIDTH;
+    obstacle_rect.h = TREE_HEIGHT;
   }
 }
 
@@ -74,10 +80,10 @@ void Obstacle::findPosition(std::vector<Pixel>& terrain, std::vector<SDL_Rect *>
         position_found &= false;
     }
   }
-  int y = findTopGroundPixel(terrain, x);
+  int y = findTopGroundPixel(terrain, x+obstacle_rect.w/2);
 
-  setPosition(x, y - obstacle_rect.w);
-  fixTerrain(terrain, x, y);
+  setPosition(x, y - obstacle_rect.h);
+  fixTerrain(terrain, &obstacle_rect);
 }
 
 void Obstacle::setPosition(int x, int y)
