@@ -123,17 +123,17 @@ bool Ball::checkTerrainCollision(std::vector<Pixel>& terrain)
   return collision_detected;
 }
 
-bool Ball::checkCannonCollision(SDL_Rect* cannon_rect)
+bool Ball::checkRectCollision(SDL_Rect* rect)
 {
   bool collision_detected = true;
 
-  if (ball_rect.x + ball_rect.w < cannon_rect->x)
+  if (ball_rect.x + ball_rect.w < rect->x)
     collision_detected = false;
-  if (ball_rect.y + ball_rect.h < cannon_rect->y)
+  if (ball_rect.y + ball_rect.h < rect->y)
     collision_detected = false;
-  if (ball_rect.x > cannon_rect->x + cannon_rect->w)
+  if (ball_rect.x > rect->x + rect->w)
     collision_detected = false;
-  if (ball_rect.y > cannon_rect->y + cannon_rect->h)
+  if (ball_rect.y > rect->y + rect->h)
     collision_detected = false;
 
   if (collision_detected)

@@ -19,7 +19,7 @@ Obstacle::~Obstacle()
 void Obstacle::init(SDL_Renderer* renderer, Obstacle_Type obs_type, bool flipped)
 {
   type = obs_type;
-  alive = true;
+  alive = false;
   is_flipped = flipped;
 
   if (type == HOSPITAL)
@@ -86,6 +86,7 @@ void Obstacle::findPosition(std::vector<Pixel>& terrain, std::vector<SDL_Rect *>
 
   setPosition(x, y - obstacle_rect.h);
   fixTerrain(terrain, &obstacle_rect);
+  alive = true;
 }
 
 void Obstacle::setPosition(int x, int y)

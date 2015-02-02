@@ -209,7 +209,7 @@ void Level::update()
 
     if (is_player1)
     {
-      if (ball.checkCannonCollision(cannonR.getRect()))
+      if (ball.checkRectCollision(cannonR.getRect()))
       {
         cannonR.die();
         score.playerLScores(10);
@@ -217,16 +217,40 @@ void Level::update()
         respawn_timer.start();
         is_a_player_dead = true;
       }
+      else if (gObstacleTotal >= 2 && obstacles[1].alive && ball.checkRectCollision(obstacles[1].getRect()))
+      {
+        obstacles[1].alive = false;
+        score.playerLScores(5);
+        is_player1 = !is_player1;
+      }
+      else if (gObstacleTotal >= 4 && obstacles[3].alive && ball.checkRectCollision(obstacles[3].getRect()))
+      {
+        obstacles[3].alive = false;
+        score.playerLScores(3);
+        is_player1 = !is_player1;
+      }
     }
     else
     {
-      if (ball.checkCannonCollision(cannonL.getRect()))
+      if (ball.checkRectCollision(cannonL.getRect()))
       {
         cannonL.die();
         score.playerRScores(10);
         is_player1 = !is_player1;
         respawn_timer.start();
         is_a_player_dead = true;
+      }
+      else if (gObstacleTotal >= 2 && obstacles[0].alive && ball.checkRectCollision(obstacles[0].getRect()))
+      {
+        obstacles[0].alive = false;
+        score.playerRScores(5);
+        is_player1 = !is_player1;
+      }
+      else if (gObstacleTotal >= 4 && obstacles[2].alive && ball.checkRectCollision(obstacles[2].getRect()))
+      {
+        obstacles[2].alive = false;
+        score.playerRScores(3);
+        is_player1 = !is_player1;
       }
     }
   }

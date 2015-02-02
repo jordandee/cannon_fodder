@@ -20,7 +20,7 @@ class Ball
 
     void shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle);
 
-    bool checkCannonCollision(SDL_Rect* cannon_rect);
+    bool checkRectCollision(SDL_Rect* rect);
     bool checkTerrainCollision(std::vector<Pixel>& terrain);
 
     bool isDead();

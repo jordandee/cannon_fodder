@@ -1,9 +1,27 @@
-terrain generation:
-make it so trees can spawn anywhere regardless of flip setting
+gameplay:
+create win/lose scenario, 50 pts?
 
 menu:
+create empty menu
 add simple menu with background picture (screenshot + title ?)
 add text box for each option: vs player, vs ai, options, exit
+make each text box work
+
+options:
+create empty options
+add text box for each option: terrain type, obstacles, wind, fullscreen
+implement fullscreen
+make each text box work with its possible selections
+
+gameplay:
+implement wind
+set wind based on global settings
+
+ai:
+ai first version, just does same shot every time
+randomize shot within particular angle and force range
+update one side of range based on where shot landed relative to opponent
+make sure ranges reset after a cannon death
 
 controls:
 figure out max shot_dt cap, if any?
@@ -20,6 +38,7 @@ xcc for web js, emscripten?
 
 would be nice:
 get ChicagoBold font since I believe that was used in the original game
+curvy terrain gen
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -112,3 +131,8 @@ terrain generation:
 -add trees to terrain gen
 -make # of obstacles based on global settings - trees, houses and hospitals
 -make it so trees can spawn overlapping, need transparency
+-make it so trees can spawn anywhere regardless of flip setting
+
+gameplay:
+-add collisions for hitting other player's buildings
+-add points for hitting other player's buildings
