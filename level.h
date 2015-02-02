@@ -51,6 +51,7 @@ private:
   bool is_player1, is_a_player_dead;
 
   Score score;
+  int win_score;
 };
 
 #endif

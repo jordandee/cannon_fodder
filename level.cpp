@@ -63,6 +63,7 @@ void Level::init(GameEngine* ge)
   is_player1 = true;
 
   score.init(ge->renderer);
+  win_score = 20;
 }
 
 void Level::spawnLevel()
@@ -216,6 +217,10 @@ void Level::update()
         is_player1 = !is_player1;
         respawn_timer.start();
         is_a_player_dead = true;
+        if (score.getPlayerLScore() >= win_score)
+          score.warMessage = 1;
+        else
+          score.battleMessage = 1;
       }
       else if (gObstacleTotal >= 2 && obstacles[1].alive && ball.checkRectCollision(obstacles[1].getRect()))
       {
@@ -239,6 +244,10 @@ void Level::update()
         is_player1 = !is_player1;
         respawn_timer.start();
         is_a_player_dead = true;
+        if (score.getPlayerRScore() >= win_score)
+          score.warMessage = 2;
+        else
+          score.battleMessage = 2;
       }
       else if (gObstacleTotal >= 2 && obstacles[0].alive && ball.checkRectCollision(obstacles[0].getRect()))
       {
@@ -272,8 +281,16 @@ void Level::render(GameEngine* ge)
   SDL_SetRenderDrawColor(ge->renderer, 0xff, 0xff, 0xff, 0);
   SDL_RenderClear(ge->renderer);
 
-  if (is_a_player_dead && respawn_timer.getTime() > 3.0)
+  if (is_a_player_dead && (respawn_timer.getTime() > 3.0f))
+  {
     spawnLevel();
+    score.battleMessage = 0;
+    if (score.warMessage != 0)
+    {
+      score.resetScores();
+      score.warMessage = 0;
+    }
+  }
 
   for (auto it = obstacles.begin(); it != obstacles.end(); ++it)
     it->render(ge->renderer);

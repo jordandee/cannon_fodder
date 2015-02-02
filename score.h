@@ -18,12 +18,22 @@ class Score
     void playerRScores(int points);
     void updateScoreTextures(SDL_Renderer* renderer);
 
+    int getPlayerLScore(void);
+    int getPlayerRScore(void);
+    void resetScores(void);
+
+    int battleMessage;
+    int warMessage;
+
   private:
     int scoreL, scoreR;
     SDL_Texture *text_texture, *scoreL_texture, *scoreR_texture;
-    TTF_Font *font;
+    SDL_Texture *battleL_texture, *battleR_texture;
+    SDL_Texture *warL_texture, *warR_texture;
+    TTF_Font *font12, *font24;
     SDL_Surface *text_surf;
     SDL_Rect text_rect, scoreL_rect, scoreR_rect;
+    SDL_Rect battle_rect, war_rect;
     SDL_Color text_color;
 
     bool update_score_textures;

@@ -6,44 +6,90 @@
 
 Score::Score()
 {
-  scoreL = 1337;
-  scoreR = 123456789;
+  scoreL = 0;
+  scoreR = 0;
   text_texture = NULL;
   scoreL_texture = NULL;
   scoreR_texture = NULL;
-  font = NULL;
+  battleL_texture = NULL;
+  battleR_texture = NULL;
+  warL_texture = NULL;
+  warR_texture = NULL;
+  font12 = NULL;
+  font24 = NULL;
   text_surf = NULL;
   text_rect = {0,0,0,0};
   scoreL_rect = {0,0,0,0};
   scoreR_rect = {0,0,0,0};
+  battle_rect = {0,0,0,0};
+  war_rect = {0,0,0,0};
   text_color = {0,0,0};
   update_score_textures = false;
+  battleMessage = 0;
+  warMessage = 0;
 }
 
 Score::~Score()
 {
   SDL_DestroyTexture(text_texture);
-  // TTF_CloseFont(font); // causes seg faults, why?
+  // TTF_CloseFont(font12); // causes seg faults, why?
 }
 
 void Score::init(SDL_Renderer* renderer)
 {
-  font = TTF_OpenFont("fonts/Chicago.ttf", 12);
+  font12 = TTF_OpenFont("fonts/Chicago.ttf", 12);
+  font24 = TTF_OpenFont("fonts/Chicago.ttf", 24);
 
   // score center heading
   char score[10] = "<-SCORE->";
 
   // calculate size of score text using font size specified
-  TTF_SizeText(font, &score[0], &text_rect.w, &text_rect.h);
+  TTF_SizeText(font12, &score[0], &text_rect.w, &text_rect.h);
   text_rect.x = 400 - text_rect.w/2;
   text_rect.y = 5;
 
-  text_surf = TTF_RenderText_Solid(font, score, text_color);
+  text_surf = TTF_RenderText_Solid(font12, score, text_color);
   text_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
   SDL_FreeSurface(text_surf);
   text_surf = NULL;
 
   updateScoreTextures(renderer);
+
+  // win a battle messages
+  char battlewon1[30] = "Player 1 has won the battle!!";
+
+  TTF_SizeText(font24, &battlewon1[0], &battle_rect.w, &battle_rect.h);
+  battle_rect.x = 400 - battle_rect.w/2;
+  battle_rect.y = 100;
+
+  text_surf = TTF_RenderText_Solid(font24, battlewon1, text_color);
+  battleL_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
+  SDL_FreeSurface(text_surf);
+  text_surf = NULL;
+
+  char battlewon2[30] = "Player 2 has won the battle!!";
+  text_surf = TTF_RenderText_Solid(font24, battlewon2, text_color);
+  battleR_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
+  SDL_FreeSurface(text_surf);
+  text_surf = NULL;
+
+  // win a war messages
+  char warwon1[30] = "Player 1 has won the WAR!!!";
+
+  TTF_SizeText(font24, &warwon1[0], &war_rect.w, &war_rect.h);
+  war_rect.x = 400 - war_rect.w/2;
+  war_rect.y = 100;
+
+  text_surf = TTF_RenderText_Solid(font24, warwon1, text_color);
+  warL_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
+  SDL_FreeSurface(text_surf);
+  text_surf = NULL;
+
+  char warwon2[30] = "Player 2 has won the WAR!!!";
+  text_surf = TTF_RenderText_Solid(font24, warwon2, text_color);
+  warR_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
+  SDL_FreeSurface(text_surf);
+  text_surf = NULL;
 }
 
 void Score::update(double dt)
@@ -61,6 +107,16 @@ void Score::render(SDL_Renderer* renderer)
   SDL_RenderCopy(renderer, text_texture, NULL, &text_rect);
   SDL_RenderCopy(renderer, scoreL_texture, NULL, &scoreL_rect);
   SDL_RenderCopy(renderer, scoreR_texture, NULL, &scoreR_rect);
+
+  if (battleMessage == 1)
+    SDL_RenderCopy(renderer, battleL_texture, NULL, &battle_rect);
+  else if (battleMessage == 2)
+    SDL_RenderCopy(renderer, battleR_texture, NULL, &battle_rect);
+
+  if (warMessage == 1)
+    SDL_RenderCopy(renderer, warL_texture, NULL, &war_rect);
+  else if (warMessage == 2)
+    SDL_RenderCopy(renderer, warR_texture, NULL, &war_rect);
 }
 
 void Score::playerLScores(int points)
@@ -85,11 +141,11 @@ void Score::updateScoreTextures(SDL_Renderer* renderer)
   std::string score_str = std::to_string(scoreL);
   std::strcpy(&score[0], score_str.c_str());
 
-  TTF_SizeText(font, &score[0], &scoreL_rect.w, &scoreL_rect.h);
+  TTF_SizeText(font12, &score[0], &scoreL_rect.w, &scoreL_rect.h);
   scoreL_rect.x = 200 - scoreL_rect.w/2;
   scoreL_rect.y = 5;
 
-  text_surf = TTF_RenderText_Solid(font, score, text_color);
+  text_surf = TTF_RenderText_Solid(font12, score, text_color);
   scoreL_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
   SDL_FreeSurface(text_surf);
   text_surf = NULL;
@@ -98,12 +154,29 @@ void Score::updateScoreTextures(SDL_Renderer* renderer)
   score_str = std::to_string(scoreR);
   std::strcpy(&score[0], score_str.c_str());
 
-  TTF_SizeText(font, &score[0], &scoreR_rect.w, &scoreR_rect.h);
+  TTF_SizeText(font12, &score[0], &scoreR_rect.w, &scoreR_rect.h);
   scoreR_rect.x = 600 - scoreR_rect.w/2;
   scoreR_rect.y = 5;
 
-  text_surf = TTF_RenderText_Solid(font, score, text_color);
+  text_surf = TTF_RenderText_Solid(font12, score, text_color);
   scoreR_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
   SDL_FreeSurface(text_surf);
   text_surf = NULL;
+}
+
+int Score::getPlayerLScore(void)
+{
+  return scoreL;
+}
+
+int Score::getPlayerRScore(void)
+{
+  return scoreR;
+}
+
+void Score::resetScores(void)
+{
+  update_score_textures = true;
+  scoreL = 0;
+  scoreR = 0;
 }
