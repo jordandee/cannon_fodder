@@ -1,8 +1,8 @@
 menu:
-create empty menu
-add simple menu with background picture (screenshot + title ?)
+add simple menu
 add text box for each option: vs player, vs ai, options, exit
-make each text box work
+make each text box work when clicked
+make each text box work using tab + enter
 
 options:
 create empty options
@@ -136,3 +136,8 @@ gameplay:
 -create win/lose battle messages
 -create win/lose war messages
 -create win/lose scenario, x pts to win
+
+menu:
+-create empty menu
+-add background screenshot
+-add game title

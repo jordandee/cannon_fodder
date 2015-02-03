@@ -3,7 +3,7 @@
 // Clone by Jordan Dee McConnell, 2014
 
 #include "gameengine.h"
-//#include "title.h"
+#include "title.h"
 #include "level.h"
 
 int main (int argc, char *argv[])
@@ -12,7 +12,7 @@ int main (int argc, char *argv[])
 
   game.init();
 
-  game.changeState(Level::Instance());
+  game.changeState(Title::Instance());
 
   while (game.running())
   {
