@@ -27,6 +27,8 @@ void Title::init(GameEngine* ge)
   options_rect = {0,0,0,0};
   exit_texture = NULL;
   exit_rect = {0,0,0,0};
+  outline = {0,0,0,0};
+  option = 0;
 
   // title center heading
   font48 = TTF_OpenFont("fonts/Chicago.ttf", 48);
@@ -91,6 +93,8 @@ void Title::init(GameEngine* ge)
   exit_texture = SDL_CreateTextureFromSurface(ge->renderer, text_surf);
   SDL_FreeSurface(text_surf);
   text_surf = NULL;
+
+
 }
 
 void Title::quit()
@@ -108,7 +112,19 @@ void Title::handleEvents(GameEngine* ge)
     {
       if (e.key.keysym.sym == SDLK_ESCAPE)
         ge->stop();
-      else
+      else if (e.key.keysym.sym == SDLK_TAB)
+      {
+        SDL_Keymod keymod = SDL_GetModState();
+        if (keymod == KMOD_LSHIFT || keymod == KMOD_RSHIFT)
+        {
+          option--;
+          if (option < 0)
+            option = 3;
+        }
+        else
+          option++;
+      }
+      else if (e.key.keysym.sym == SDLK_SPACE)
         ge->changeState(Level::Instance());
     }
   }
@@ -116,6 +132,35 @@ void Title::handleEvents(GameEngine* ge)
 
 void Title::update()
 {
+  switch (option)
+  {
+    case 0:
+      {
+        outline = {vs_human_rect.x-10,vs_human_rect.y-10,vs_human_rect.w+20,vs_human_rect.h+20};
+        break;
+      }
+    case 1:
+      {
+        outline = {vs_bot_rect.x-10,vs_bot_rect.y-10,vs_bot_rect.w+20,vs_bot_rect.h+20};
+        break;
+      }
+    case 2:
+      {
+        outline = {options_rect.x-10,options_rect.y-10,options_rect.w+20,options_rect.h+20};
+        break;
+      }
+    case 3:
+      {
+        outline = {exit_rect.x-10,exit_rect.y-10,exit_rect.w+20,exit_rect.h+20};
+        break;
+      }
+    default:
+      {
+        outline = {vs_human_rect.x-10,vs_human_rect.y-10,vs_human_rect.w+20,vs_human_rect.h+20};
+        option = 0;
+        break;
+      }
+  }
 }
 
 void Title::render(GameEngine* ge)
@@ -131,6 +176,24 @@ void Title::render(GameEngine* ge)
   SDL_RenderCopy(ge->renderer, vs_bot_texture, NULL, &vs_bot_rect);
   SDL_RenderCopy(ge->renderer, options_texture, NULL, &options_rect);
   SDL_RenderCopy(ge->renderer, exit_texture, NULL, &exit_rect);
+
+  // draw outline 4 pixels wide
+  SDL_RenderDrawRect(ge->renderer, &outline);
+  outline.x += 1;
+  outline.y += 1;
+  outline.w -= 2;
+  outline.h -= 2;
+  SDL_RenderDrawRect(ge->renderer, &outline);
+  outline.x += 1;
+  outline.y += 1;
+  outline.w -= 2;
+  outline.h -= 2;
+  SDL_RenderDrawRect(ge->renderer, &outline);
+  outline.x += 1;
+  outline.y += 1;
+  outline.w -= 2;
+  outline.h -= 2;
+  SDL_RenderDrawRect(ge->renderer, &outline);
 
   SDL_RenderPresent(ge->renderer);
 }

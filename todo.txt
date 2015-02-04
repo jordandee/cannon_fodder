@@ -1,6 +1,5 @@
 menu:
-use white outline box to indicate which option is selected
-make each text box work using tab + enter
+make each text box work with enter/space
 make each text box work when clicked
 
 options:
@@ -142,3 +141,5 @@ menu:
 -add game title
 -add simple menu
 -add text box for each option: vs player, vs ai, options, exit
+-use white outline box to indicate which option is selected
+-allow tab and shift tab to select different text boxes

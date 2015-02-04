@@ -34,6 +34,9 @@ private:
   SDL_Rect title_rect;
   SDL_Texture *vs_human_texture, *vs_bot_texture, *options_texture, *exit_texture;
   SDL_Rect vs_human_rect, vs_bot_rect, options_rect, exit_rect;
+
+  int option;
+  SDL_Rect outline;
 };
 
 #endif
