@@ -1,8 +1,7 @@
 menu:
-add simple menu
-add text box for each option: vs player, vs ai, options, exit
-make each text box work when clicked
+use white outline box to indicate which option is selected
 make each text box work using tab + enter
+make each text box work when clicked
 
 options:
 create empty options
@@ -141,3 +140,5 @@ menu:
 -create empty menu
 -add background screenshot
 -add game title
+-add simple menu
+-add text box for each option: vs player, vs ai, options, exit

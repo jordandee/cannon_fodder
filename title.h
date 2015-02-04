@@ -26,11 +26,14 @@ private:
   SDL_Texture* background_texture;
   SDL_Rect background_rect;
 
-  SDL_Texture *text_texture;
-  TTF_Font *font;
+  TTF_Font *font48, *font24;
   SDL_Surface *text_surf;
-  SDL_Rect text_rect;
   SDL_Color text_color;
+
+  SDL_Texture *title_texture;
+  SDL_Rect title_rect;
+  SDL_Texture *vs_human_texture, *vs_bot_texture, *options_texture, *exit_texture;
+  SDL_Rect vs_human_rect, vs_bot_rect, options_rect, exit_rect;
 };
 
 #endif
