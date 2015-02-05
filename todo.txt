@@ -1,7 +1,3 @@
-menu:
-make each text box work with enter/space
-make each text box work when clicked
-
 options:
 create empty options
 add text box for each option: terrain type, obstacles, wind, fullscreen
@@ -143,3 +139,5 @@ menu:
 -add text box for each option: vs player, vs ai, options, exit
 -use white outline box to indicate which option is selected
 -allow tab and shift tab to select different text boxes
+-make each text box work with enter/space
+-make each text box work when clicked

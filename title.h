@@ -15,6 +15,8 @@ public:
   void update();
   void render(GameEngine* ge);
 
+  void selectOption(GameEngine* ge);
+
   static Title* Instance() { return &_s; }
 
 protected:

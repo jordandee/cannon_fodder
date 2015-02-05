@@ -57,7 +57,7 @@ void Title::init(GameEngine* ge)
   vs_human_texture = SDL_CreateTextureFromSurface(ge->renderer, text_surf);
   SDL_FreeSurface(text_surf);
   text_surf = NULL;
-  
+
   char vs_bot_button[20] = "vs Bot";
 
   // calculate size of score text using font size specified
@@ -108,55 +108,86 @@ void Title::handleEvents(GameEngine* ge)
   {
     if (e.type == SDL_QUIT)
       ge->stop();
-    if (e.type == SDL_KEYDOWN)
+    else if (e.type == SDL_KEYDOWN)
     {
       if (e.key.keysym.sym == SDLK_ESCAPE)
         ge->stop();
       else if (e.key.keysym.sym == SDLK_TAB)
       {
         SDL_Keymod keymod = SDL_GetModState();
-        if (keymod == KMOD_LSHIFT || keymod == KMOD_RSHIFT)
+        if (keymod == KMOD_LSHIFT || keymod == KMOD_RSHIFT || keymod == KMOD_SHIFT)
         {
           option--;
           if (option < 0)
             option = 3;
         }
         else
+        {
           option++;
+        }
       }
-      else if (e.key.keysym.sym == SDLK_SPACE)
-        ge->changeState(Level::Instance());
+      else if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_SPACE)
+      {
+        selectOption(ge);
+      }
+    }
+    else if (e.type == SDL_MOUSEBUTTONDOWN)
+    {
+      if (e.button.button == SDL_BUTTON_LEFT)
+      {
+        selectOption(ge);
+      }
+    }
+    else if (e.type == SDL_MOUSEMOTION)
+    {
+        int x = e.button.x;
+        int y = e.button.y;
+        if (x > 490 && x < (490+vs_human_rect.w+20))
+        {
+          if (y > 340)
+          {
+            if (y < 390)
+              option = 0;
+            else if (y < 440)
+              option = 1;
+            else if (y < 490)
+              option = 2;
+            else if (y < 540)
+              option = 3;
+          }
+        }
     }
   }
 }
 
 void Title::update()
 {
+  int pad = 10;
   switch (option)
   {
     case 0:
       {
-        outline = {vs_human_rect.x-10,vs_human_rect.y-10,vs_human_rect.w+20,vs_human_rect.h+20};
+        outline = {vs_human_rect.x-pad,vs_human_rect.y-pad,vs_human_rect.w+2*pad,vs_human_rect.h+2*pad};
         break;
       }
     case 1:
       {
-        outline = {vs_bot_rect.x-10,vs_bot_rect.y-10,vs_bot_rect.w+20,vs_bot_rect.h+20};
+        outline = {vs_bot_rect.x-pad,vs_bot_rect.y-pad,vs_bot_rect.w+2*pad,vs_bot_rect.h+2*pad};
         break;
       }
     case 2:
       {
-        outline = {options_rect.x-10,options_rect.y-10,options_rect.w+20,options_rect.h+20};
+        outline = {options_rect.x-pad,options_rect.y-pad,options_rect.w+2*pad,options_rect.h+2*pad};
         break;
       }
     case 3:
       {
-        outline = {exit_rect.x-10,exit_rect.y-10,exit_rect.w+20,exit_rect.h+20};
+        outline = {exit_rect.x-pad,exit_rect.y-pad,exit_rect.w+2*pad,exit_rect.h+2*pad};
         break;
       }
     default:
       {
-        outline = {vs_human_rect.x-10,vs_human_rect.y-10,vs_human_rect.w+20,vs_human_rect.h+20};
+        outline = {vs_human_rect.x-pad,vs_human_rect.y-pad,vs_human_rect.w+2*pad,vs_human_rect.h+2*pad};
         option = 0;
         break;
       }
@@ -196,4 +227,35 @@ void Title::render(GameEngine* ge)
   SDL_RenderDrawRect(ge->renderer, &outline);
 
   SDL_RenderPresent(ge->renderer);
+}
+
+void Title::selectOption(GameEngine* ge)
+{
+  switch (option)
+  {
+    case 0:
+      {
+        ge->changeState(Level::Instance());
+        break;
+      }
+    case 1:
+      {
+        //ai
+        break;
+      }
+    case 2:
+      {
+        //ge->changeState(Options::Instance());
+        break;
+      }
+    case 3:
+      {
+        ge->stop();
+        break;
+      }
+    default:
+      {
+        break;
+      }
+  }
 }
