@@ -1,12 +1,10 @@
 options:
-create empty options
-add text box for each option: terrain type, obstacles, wind, fullscreen
-implement fullscreen
-make each text box work with its possible selections
+highlight current and active selections
 
 gameplay:
 implement wind
 set wind based on global settings
+implement fullscreen
 
 ai:
 ai first version, just does same shot every time
@@ -144,4 +142,6 @@ menu:
 
 options:
 -create empty options
--add text box for each option: terrain type, obstacles, wind, fullscreen
+-add text box for each label: terrain type, obstacles, wind, fullscreen
+-add text box for each label's possible selections
+-create outline button function

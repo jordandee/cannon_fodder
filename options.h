@@ -15,9 +15,17 @@ struct Button
 
 struct Label
 {
-  SDL_Texture *texture;
-  SDL_Rect rect;
+  union
+  {
+    Button button;
+    struct
+    {
+    SDL_Texture *texture;
+    SDL_Rect rect;
+    };
+  };
   int active_selection;
+  int valid_selections;
   Button selection[OPTION_TOTAL];
 };
 
@@ -46,10 +54,21 @@ private:
 
   TTF_Font *font48, *font24;
 
-  Button title, terrain_type, obstacles, wind, fullscreen;
+  Button title;
+  union
+  {
+    Label labels[4];
+    struct
+    {
+      Label terrain_type;
+      Label obstacles;
+      Label wind;
+      Label fullscreen;
+    };
+  };
+  //Button title, terrain_type, obstacles, wind, fullscreen;
 
   int option;
-  SDL_Rect outline;
 };
 
 #endif
