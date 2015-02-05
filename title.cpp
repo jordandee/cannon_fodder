@@ -4,6 +4,7 @@
 #include "title.h"
 #include "level.h"
 #include "resources.h"
+#include "options.h"
 
 Title Title::_s;
 
@@ -245,7 +246,7 @@ void Title::selectOption(GameEngine* ge)
       }
     case 2:
       {
-        //ge->changeState(Options::Instance());
+        ge->changeState(Options::Instance());
         break;
       }
     case 3:

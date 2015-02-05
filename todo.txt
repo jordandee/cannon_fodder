@@ -141,3 +141,7 @@ menu:
 -allow tab and shift tab to select different text boxes
 -make each text box work with enter/space
 -make each text box work when clicked
+
+options:
+-create empty options
+-add text box for each option: terrain type, obstacles, wind, fullscreen
