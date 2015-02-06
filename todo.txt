@@ -1,5 +1,11 @@
 options:
-highlight current and active selections
+allow changing active selection with enter/space
+load current settings at options startup
+save current settings when exiting options
+
+cleanup:
+separate button code from options screen into its own thing
+integrate button code into title screen
 
 gameplay:
 implement wind
@@ -145,3 +151,5 @@ options:
 -add text box for each label: terrain type, obstacles, wind, fullscreen
 -add text box for each label's possible selections
 -create outline button function
+-highlight current and active selections
+-move highlighted selection with wsad/arrows/tab

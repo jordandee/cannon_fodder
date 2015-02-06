@@ -55,9 +55,10 @@ private:
   TTF_Font *font48, *font24;
 
   Button title;
+  static const int total_labels = 4;
   union
   {
-    Label labels[4];
+    Label labels[total_labels];
     struct
     {
       Label terrain_type;
@@ -66,7 +67,10 @@ private:
       Label fullscreen;
     };
   };
-  //Button title, terrain_type, obstacles, wind, fullscreen;
+
+  int highlighted_label;
+  int highlighted_selection;
+  bool highlight_enable;
 
   int option;
 };

@@ -5,6 +5,7 @@
 #include "options.h"
 #include "level.h"
 #include "resources.h"
+#include "title.h"
 
 Options Options::_s;
 
@@ -41,16 +42,14 @@ void CreateButtonsForLabel(SDL_Renderer *renderer, Label *label, int nButtons, c
   }
 }
 
-void DrawButtonOutline(SDL_Renderer *renderer, SDL_Rect outline)
+void DrawButtonOutline(SDL_Renderer *renderer, SDL_Rect outline, int pad, int width)
 {
-  int pad = 10;
-
   outline.x -= pad;
   outline.y -= pad;
   outline.w += 2*pad;
   outline.h += 2*pad;
 
-  for (int i= 0; i < 4; ++i)
+  for (int i= 0; i < width; ++i)
   {
     SDL_RenderDrawRect(renderer, &outline);
     outline.x += 1;
@@ -78,6 +77,13 @@ void Options::init(GameEngine* ge)
   obstacles ={};
   wind = {};
   fullscreen = {};
+  highlighted_label = 0;
+  highlighted_selection = 0;
+  highlight_enable = false;
+  labels[0].active_selection = 2;
+  labels[1].active_selection = 2;
+  labels[2].active_selection = 0;
+  labels[3].active_selection = 1;
 
   makeButton(ge->renderer, &title, "Options", font48);
   setButtonPosition(&title, 100, 100);
@@ -116,25 +122,67 @@ void Options::handleEvents(GameEngine* ge)
       ge->stop();
     else if (e.type == SDL_KEYDOWN)
     {
-      if (e.key.keysym.sym == SDLK_ESCAPE)
-        ge->stop();
-      else if (e.key.keysym.sym == SDLK_TAB)
+      SDL_Keycode key = e.key.keysym.sym;
+      if (key == SDLK_ESCAPE)
+      {
+        ge->changeState(Title::Instance());
+        //ge->stop();
+      }
+
+      if (!highlight_enable)
+      {
+        highlight_enable = true;
+        break;
+      }
+
+      if (key == SDLK_TAB)
       {
         SDL_Keymod keymod = SDL_GetModState();
         if (keymod == KMOD_LSHIFT || keymod == KMOD_RSHIFT || keymod == KMOD_SHIFT)
         {
-          option--;
-          if (option < 0)
-            option = 3;
+          highlighted_selection--;
+          if (highlighted_selection < 0)
+            highlighted_selection = labels[highlighted_label].valid_selections - 1;
         }
         else
         {
-          option++;
+          highlighted_selection++;
+          if (highlighted_selection >= labels[highlighted_label].valid_selections)
+            highlighted_selection = 0;
         }
       }
-      else if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_SPACE)
+      else if (key == SDLK_RETURN || key == SDLK_SPACE)
       {
         //selectOption(ge);
+      }
+      else if (key == SDLK_w || key == SDLK_UP)
+      {
+        highlighted_label--;
+        if (highlighted_label < 0)
+          highlighted_label = total_labels - 1;
+        if (highlighted_selection >= labels[highlighted_label].valid_selections)
+          highlighted_selection = labels[highlighted_label].valid_selections - 1;
+      }
+      else if (key == SDLK_s || key == SDLK_DOWN)
+      {
+        highlighted_label++;
+        if (highlighted_label >= total_labels)
+          highlighted_label = 0;
+        if (highlighted_selection >= labels[highlighted_label].valid_selections)
+          highlighted_selection = labels[highlighted_label].valid_selections - 1;
+
+      }
+      else if (key == SDLK_a || key == SDLK_LEFT)
+      {
+        highlighted_selection--;
+        if (highlighted_selection < 0)
+          highlighted_selection = labels[highlighted_label].valid_selections - 1;
+      }
+      else if (key == SDLK_d || key == SDLK_RIGHT)
+      {
+        highlighted_selection++;
+        if (highlighted_selection >= labels[highlighted_label].valid_selections)
+          highlighted_selection = 0;
       }
     }
     else if (e.type == SDL_MOUSEBUTTONDOWN)
@@ -171,9 +219,12 @@ void Options::render(GameEngine* ge)
     {
       Button b = labels[label_index].selection[i];
       SDL_RenderCopy(ge->renderer, b.texture, NULL, &b.rect);
-      DrawButtonOutline(ge->renderer, b.rect);
+      if (labels[label_index].active_selection == i)
+        DrawButtonOutline(ge->renderer, b.rect, 10, 4);
     }
   }
+  if (highlight_enable)
+    DrawButtonOutline(ge->renderer, labels[highlighted_label].selection[highlighted_selection].rect, 5, 2);
 
   SDL_RenderPresent(ge->renderer);
 }
