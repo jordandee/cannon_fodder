@@ -4,30 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "gamestate.h"
-
-#define OPTION_TOTAL 7
-
-struct Button
-{
-  SDL_Texture *texture;
-  SDL_Rect rect;
-};
-
-struct Label
-{
-  union
-  {
-    Button button;
-    struct
-    {
-    SDL_Texture *texture;
-    SDL_Rect rect;
-    };
-  };
-  int active_selection;
-  int valid_selections;
-  Button selection[OPTION_TOTAL];
-};
+#include "buttons.h"
 
 class Options : public GameState
 {
@@ -51,6 +28,7 @@ private:
 
   SDL_Texture* background_texture;
   SDL_Rect background_rect;
+  SDL_Color text_color;
 
   TTF_Font *font48, *font24;
 

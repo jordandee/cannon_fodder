@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "gamestate.h"
+#include "buttons.h"
 
 class Title : public GameState
 {
@@ -32,13 +33,17 @@ private:
   SDL_Surface *text_surf;
   SDL_Color text_color;
 
-  SDL_Texture *title_texture;
-  SDL_Rect title_rect;
-  SDL_Texture *vs_human_texture, *vs_bot_texture, *options_texture, *exit_texture;
-  SDL_Rect vs_human_rect, vs_bot_rect, options_rect, exit_rect;
+  Button bTitle;
+  union
+  {
+    Button buttons[4];
+    struct
+    {
+      Button vs_human, vs_bot, options, exit;
+    };
+  };
 
   int option;
-  SDL_Rect outline;
 };
 
 #endif

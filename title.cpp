@@ -16,86 +16,34 @@ void Title::init(GameEngine* ge)
 
   font48 = NULL;
   font24 = NULL;
-  text_surf = NULL;
-  text_color = {0,0,0};
-  title_texture = NULL;
-  title_rect = {0,0,0,0};
-  vs_human_texture = NULL;
-  vs_human_rect = {0,0,0,0};
-  vs_bot_texture = NULL;
-  vs_bot_rect = {0,0,0,0};
-  options_texture = NULL;
-  options_rect = {0,0,0,0};
-  exit_texture = NULL;
-  exit_rect = {0,0,0,0};
-  outline = {0,0,0,0};
-  option = 0;
+  font48 = TTF_OpenFont("fonts/Chicago.ttf", 48);
+  font24 = TTF_OpenFont("fonts/Chicago.ttf", 24);
 
   // title center heading
-  font48 = TTF_OpenFont("fonts/Chicago.ttf", 48);
-  char title[20] = "Cannon Fodder";
+  text_color = {0,0,0};
 
-  TTF_SizeText(font48, &title[0], &title_rect.w, &title_rect.h);
-  title_rect.x = 400 - title_rect.w/2;
-  title_rect.y = 128;
-
-  text_surf = TTF_RenderText_Solid(font48, title, text_color);
-  title_texture = SDL_CreateTextureFromSurface(ge->renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
+  bTitle = {};
+  makeButton(ge->renderer, &bTitle, "Cannon Fodder", font48, text_color);
+  setButtonPosition(&bTitle, 400 - bTitle.rect.w/2, 128);
 
   // menu
   text_color = {255,255,255};
-  font24 = TTF_OpenFont("fonts/Chicago.ttf", 24);
-  char vs_human_button[20] = "vs Human";
 
-  // calculate size of score text using font size specified
-  TTF_SizeText(font24, &vs_human_button[0], &vs_human_rect.w, &vs_human_rect.h);
-  vs_human_rect.x = 500;
-  vs_human_rect.y = 350;
+  vs_human = {};
+  makeButton(ge->renderer, &vs_human, "vs Human", font24, text_color);
+  setButtonPosition(&vs_human, 500, 350);
 
-  text_surf = TTF_RenderText_Solid(font48, vs_human_button, text_color);
-  vs_human_texture = SDL_CreateTextureFromSurface(ge->renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
+  vs_bot = {};
+  makeButton(ge->renderer, &vs_bot, "vs Bot", font24, text_color);
+  setButtonPosition(&vs_bot, 500, 400);
 
-  char vs_bot_button[20] = "vs Bot";
+  options = {};
+  makeButton(ge->renderer, &options, "Options", font24, text_color);
+  setButtonPosition(&options, 500, 450);
 
-  // calculate size of score text using font size specified
-  TTF_SizeText(font24, &vs_bot_button[0], &vs_bot_rect.w, &vs_bot_rect.h);
-  vs_bot_rect.x = 500;
-  vs_bot_rect.y = 400;
-
-  text_surf = TTF_RenderText_Solid(font48, vs_bot_button, text_color);
-  vs_bot_texture = SDL_CreateTextureFromSurface(ge->renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
-
-  char options_button[20] = "Options";
-
-  // calculate size of score text using font size specified
-  TTF_SizeText(font24, &options_button[0], &options_rect.w, &options_rect.h);
-  options_rect.x = 500;
-  options_rect.y = 450;
-
-  text_surf = TTF_RenderText_Solid(font48, options_button, text_color);
-  options_texture = SDL_CreateTextureFromSurface(ge->renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
-
-  char exit_button[20] = "Exit";
-
-  // calculate size of score text using font size specified
-  TTF_SizeText(font24, &exit_button[0], &exit_rect.w, &exit_rect.h);
-  exit_rect.x = 500;
-  exit_rect.y = 500;
-
-  text_surf = TTF_RenderText_Solid(font48, exit_button, text_color);
-  exit_texture = SDL_CreateTextureFromSurface(ge->renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
-
-
+  exit = {};
+  makeButton(ge->renderer, &exit, "Exit", font24, text_color);
+  setButtonPosition(&exit, 500, 500);
 }
 
 void Title::quit()
@@ -111,9 +59,24 @@ void Title::handleEvents(GameEngine* ge)
       ge->stop();
     else if (e.type == SDL_KEYDOWN)
     {
-      if (e.key.keysym.sym == SDLK_ESCAPE)
+      SDL_Keycode key = e.key.keysym.sym;
+      if (key == SDLK_ESCAPE)
+      {
         ge->stop();
-      else if (e.key.keysym.sym == SDLK_TAB)
+      }
+      else if (key == SDLK_w || key == SDLK_UP)
+      {
+        option--;
+        if (option < 0)
+          option = 3;
+      }
+      else if (key == SDLK_s || key == SDLK_DOWN)
+      {
+        option++;
+        if (option > 3)
+          option = 0;
+      }
+      else if (key == SDLK_TAB)
       {
         SDL_Keymod keymod = SDL_GetModState();
         if (keymod == KMOD_LSHIFT || keymod == KMOD_RSHIFT || keymod == KMOD_SHIFT)
@@ -125,9 +88,12 @@ void Title::handleEvents(GameEngine* ge)
         else
         {
           option++;
+          if (option > 3)
+            option = 0;
         }
       }
-      else if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_SPACE)
+      else if (key == SDLK_RETURN || key == SDLK_SPACE || 
+               key == SDLK_KP_0 || key == SDLK_KP_ENTER)
       {
         selectOption(ge);
       }
@@ -143,7 +109,7 @@ void Title::handleEvents(GameEngine* ge)
     {
         int x = e.button.x;
         int y = e.button.y;
-        if (x > 490 && x < (490+vs_human_rect.w+20))
+        if (x > 490 && x < (490+vs_human.rect.w+20))
         {
           if (y > 340)
           {
@@ -163,69 +129,23 @@ void Title::handleEvents(GameEngine* ge)
 
 void Title::update()
 {
-  int pad = 10;
-  switch (option)
-  {
-    case 0:
-      {
-        outline = {vs_human_rect.x-pad,vs_human_rect.y-pad,vs_human_rect.w+2*pad,vs_human_rect.h+2*pad};
-        break;
-      }
-    case 1:
-      {
-        outline = {vs_bot_rect.x-pad,vs_bot_rect.y-pad,vs_bot_rect.w+2*pad,vs_bot_rect.h+2*pad};
-        break;
-      }
-    case 2:
-      {
-        outline = {options_rect.x-pad,options_rect.y-pad,options_rect.w+2*pad,options_rect.h+2*pad};
-        break;
-      }
-    case 3:
-      {
-        outline = {exit_rect.x-pad,exit_rect.y-pad,exit_rect.w+2*pad,exit_rect.h+2*pad};
-        break;
-      }
-    default:
-      {
-        outline = {vs_human_rect.x-pad,vs_human_rect.y-pad,vs_human_rect.w+2*pad,vs_human_rect.h+2*pad};
-        option = 0;
-        break;
-      }
-  }
 }
 
 void Title::render(GameEngine* ge)
 {
-  //SDL_SetRenderDrawColor(ge->renderer, 0, 0, 0, 0);
   SDL_SetRenderDrawColor(ge->renderer, 0xff, 0xff, 0xff, 0);
   SDL_RenderClear(ge->renderer);
 
   SDL_RenderCopy(ge->renderer, background_texture, NULL, &background_rect);
-  SDL_RenderCopy(ge->renderer, title_texture, NULL, &title_rect);
+  SDL_RenderCopy(ge->renderer, bTitle.texture, NULL, &bTitle.rect);
 
-  SDL_RenderCopy(ge->renderer, vs_human_texture, NULL, &vs_human_rect);
-  SDL_RenderCopy(ge->renderer, vs_bot_texture, NULL, &vs_bot_rect);
-  SDL_RenderCopy(ge->renderer, options_texture, NULL, &options_rect);
-  SDL_RenderCopy(ge->renderer, exit_texture, NULL, &exit_rect);
+  SDL_RenderCopy(ge->renderer, vs_human.texture, NULL, &vs_human.rect);
+  SDL_RenderCopy(ge->renderer, vs_bot.texture, NULL, &vs_bot.rect);
+  SDL_RenderCopy(ge->renderer, options.texture, NULL, &options.rect);
+  SDL_RenderCopy(ge->renderer, exit.texture, NULL, &exit.rect);
 
   // draw outline 4 pixels wide
-  SDL_RenderDrawRect(ge->renderer, &outline);
-  outline.x += 1;
-  outline.y += 1;
-  outline.w -= 2;
-  outline.h -= 2;
-  SDL_RenderDrawRect(ge->renderer, &outline);
-  outline.x += 1;
-  outline.y += 1;
-  outline.w -= 2;
-  outline.h -= 2;
-  SDL_RenderDrawRect(ge->renderer, &outline);
-  outline.x += 1;
-  outline.y += 1;
-  outline.w -= 2;
-  outline.h -= 2;
-  SDL_RenderDrawRect(ge->renderer, &outline);
+  DrawButtonOutline(ge->renderer, buttons[option].rect, 10, 4);
 
   SDL_RenderPresent(ge->renderer);
 }

@@ -1,7 +1,3 @@
-cleanup:
-separate button code from options screen into its own thing
-integrate button code into title screen
-
 gameplay:
 implement wind
 set wind based on global settings
@@ -155,3 +151,7 @@ options:
 -allow changing active selection with enter/space
 -allow highlighting selections with mouse movement
 -allow changing active selection with left mouse click
+
+cleanup:
+-separate button code from options screen into its own thing
+-integrate button code into title screen
