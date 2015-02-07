@@ -1,8 +1,3 @@
-options:
-allow changing active selection with enter/space
-load current settings at options startup
-save current settings when exiting options
-
 cleanup:
 separate button code from options screen into its own thing
 integrate button code into title screen
@@ -17,6 +12,10 @@ ai first version, just does same shot every time
 randomize shot within particular angle and force range
 update one side of range based on where shot landed relative to opponent
 make sure ranges reset after a cannon death
+
+options:
+load current settings at options startup
+save current settings when exiting options
 
 controls:
 figure out max shot_dt cap, if any?
@@ -153,3 +152,6 @@ options:
 -create outline button function
 -highlight current and active selections
 -move highlighted selection with wsad/arrows/tab
+-allow changing active selection with enter/space
+-allow highlighting selections with mouse movement
+-allow changing active selection with left mouse click

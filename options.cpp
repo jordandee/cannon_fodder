@@ -59,6 +59,20 @@ void DrawButtonOutline(SDL_Renderer *renderer, SDL_Rect outline, int pad, int wi
   }
 }
 
+bool checkPointRectCollision(int x, int y, SDL_Rect rect)
+{
+  bool collision_occurred = false;
+
+  if (x >= rect.x && x < (rect.x + rect.w))
+  {
+    if (y >= rect.y && y < (rect.y + rect.h))
+    {
+      collision_occurred = true;
+    }
+  }
+  return collision_occurred;
+}
+
 void Options::init(GameEngine* ge)
 {
   background_rect = {0, 0, 800, 600};
@@ -67,10 +81,13 @@ void Options::init(GameEngine* ge)
 
   font48 = NULL;
   font24 = NULL;
-  option = 0;
 
   font48 = TTF_OpenFont("fonts/Chicago.ttf", 48);
   font24 = TTF_OpenFont("fonts/Chicago.ttf", 24);
+
+  mouse_moved = false;
+  mouseX = 0;
+  mouseY = 0;
 
   title = {};
   terrain_type = {};
@@ -126,7 +143,6 @@ void Options::handleEvents(GameEngine* ge)
       if (key == SDLK_ESCAPE)
       {
         ge->changeState(Title::Instance());
-        //ge->stop();
       }
 
       if (!highlight_enable)
@@ -153,7 +169,8 @@ void Options::handleEvents(GameEngine* ge)
       }
       else if (key == SDLK_RETURN || key == SDLK_SPACE)
       {
-        //selectOption(ge);
+        if (highlight_enable)
+          labels[highlighted_label].active_selection = highlighted_selection;
       }
       else if (key == SDLK_w || key == SDLK_UP)
       {
@@ -189,19 +206,39 @@ void Options::handleEvents(GameEngine* ge)
     {
       if (e.button.button == SDL_BUTTON_LEFT)
       {
-        //selectOption(ge);
+        if (highlight_enable)
+          labels[highlighted_label].active_selection = highlighted_selection;
       }
     }
     else if (e.type == SDL_MOUSEMOTION)
     {
-        int x = e.button.x;
-        int y = e.button.y;
+      mouse_moved = true;
+      mouseX = e.button.x;
+      mouseY = e.button.y;
     }
   }
 }
 
 void Options::update()
 {
+  if (mouse_moved)
+  {
+    highlight_enable = false;
+    for (int label_index = 0; label_index < 4; ++label_index)
+    {
+      for (int i = 0; i < labels[label_index].valid_selections; ++i)
+      {
+        Button b = labels[label_index].selection[i];
+        if (checkPointRectCollision(mouseX, mouseY, b.rect))
+        {
+          highlighted_label = label_index;
+          highlighted_selection = i;
+          highlight_enable = true;
+        }
+      }
+    }
+    mouse_moved = false;
+  }
 }
 
 void Options::render(GameEngine* ge)

@@ -72,7 +72,9 @@ private:
   int highlighted_selection;
   bool highlight_enable;
 
-  int option;
+  bool mouse_moved;
+  int mouseX;
+  int mouseY;
 };
 
 #endif
