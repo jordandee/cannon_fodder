@@ -1,8 +1,10 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <cmath>
+#include <cassert>
 #include "resources.h"
 #include "terrain.h"
+#include "globals.h"
 #include "ball.h"
 
 #define PI 3.14159265
@@ -44,11 +46,26 @@ void Ball::update(double dt)
 {
   if (alive)
   {
-    x = x + vx * dt + ax * dt * dt;
-    vx = vx + ax * dt;
+    // simplified wind resistance
+    assert(gWind > 3); // #define NDEBUG to turn of cassert
+    if (gWind == 0) // no wind resistance
+    {
+      vx = vx + (ax * dt);
+      vy = vy + (ay * dt);
+    }
+    else if (gWind == 1) // some wind resistance
+    {
+      vx = vx + (ax * dt) + (vx * -1/16 * dt);
+      vy = vy + (ay * dt) + (vy * -1/16 * dt);
+    }
+    else if (gWind == 2) // stronger wind resistance
+    {
+      vx = vx + (ax * dt) + (vx * -1/4 * dt);
+      vy = vy + (ay * dt) + (vy * -1/4 * dt);
+    }
 
-    y = y + vy * dt + ay * dt * dt;
-    vy = vy + ay * dt;
+    x = x + vx * dt + .5 * ax * dt * dt;
+    y = y + vy * dt + .5 * ay * dt * dt;
 
     ball_rect.x = (int) x;
     ball_rect.y = (int) y;
@@ -83,7 +100,7 @@ void Ball::shoot(int cannon_cx, int cannon_cy, double shot_dt, double shot_angle
   vx = vr * sin(shot_angle * PI/180.0);
   vy = -vr * cos(shot_angle * PI/180.0);
   ax = 0.0;
-  ay = 50.0;
+  ay = 100.0;
 
   ball_angle = shot_angle;
 

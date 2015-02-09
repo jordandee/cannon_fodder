@@ -3,5 +3,6 @@
 
 extern int gTerrainType;
 extern int gObstacleTotal;
+extern int gWind;
 
 #endif

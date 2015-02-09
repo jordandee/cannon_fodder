@@ -1,6 +1,4 @@
 gameplay:
-implement wind
-set wind based on global settings
 implement fullscreen
 
 ai:
@@ -155,3 +153,7 @@ options:
 cleanup:
 -separate button code from options screen into its own thing
 -integrate button code into title screen
+
+gameplay:
+-implement wind
+-set wind based on global settings

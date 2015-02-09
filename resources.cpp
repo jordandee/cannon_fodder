@@ -20,7 +20,10 @@ void loadSettings()
       gTerrainType = n;
     if (s == "obstacles")
       gObstacleTotal = n;
+    if (s == "wind")
+      gWind = n;
   }
+  // TODO: need bounds check
   ifs.close();
 }
 
