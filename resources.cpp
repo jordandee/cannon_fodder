@@ -22,6 +22,8 @@ void loadSettings()
       gObstacleTotal = n;
     if (s == "wind")
       gWind = n;
+    if (s == "fullscreen")
+      gFullScreen = n;
   }
   // TODO: need bounds check
   ifs.close();

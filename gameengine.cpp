@@ -4,6 +4,7 @@
 #include "gameengine.h"
 #include "gamestate.h"
 #include "resources.h"
+#include "globals.h"
 
 void GameEngine::init()
 {
@@ -17,10 +18,20 @@ void GameEngine::init()
   IMG_Init(IMG_INIT_PNG);
 
   TTF_Init();
+
+  if (gFullScreen == 1)
+  {
+    // WARNING: if game crashes in fullscreen, x11 desktop stays at 800x600
+    SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN);
+    // borderless, preserves aspect ratio but will add letterbox if needed
+    //SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    //SDL_RenderSetLogicalSize(renderer, 800, 600);
+  }
 }
 
 void GameEngine::quit()
 {
+  //SDL_SetWindowFullscreen(win, 0);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(win);
   TTF_Quit();

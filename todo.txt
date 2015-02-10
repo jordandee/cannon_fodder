@@ -1,6 +1,3 @@
-gameplay:
-implement fullscreen
-
 ai:
 ai first version, just does same shot every time
 randomize shot within particular angle and force range
@@ -157,3 +154,4 @@ cleanup:
 gameplay:
 -implement wind
 -set wind based on global settings
+-implement fullscreen

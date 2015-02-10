@@ -47,7 +47,7 @@ void Ball::update(double dt)
   if (alive)
   {
     // simplified wind resistance
-    assert(gWind > 3); // #define NDEBUG to turn of cassert
+    assert(gWind < 3); // #define NDEBUG to turn of cassert
     if (gWind == 0) // no wind resistance
     {
       vx = vx + (ax * dt);
