@@ -5,5 +5,6 @@ extern int gTerrainType;
 extern int gObstacleTotal;
 extern int gWind;
 extern int gFullScreen;
+extern int gAI_Enable;
 
 #endif

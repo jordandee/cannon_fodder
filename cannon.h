@@ -21,6 +21,7 @@ class Cannon
 
     int getCX();
     int getCY();
+    void setAngle(double angle);
     double getAngle();
     SDL_Rect* getRect();
 

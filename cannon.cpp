@@ -88,6 +88,11 @@ int Cannon::getCY()
   return cannon_rect.y + (CANNON_HEIGHT/2);
 }
 
+void Cannon::setAngle(double angle)
+{
+  shaft_rotation_angle = angle;
+}
+
 double Cannon::getAngle()
 {
   return shaft_rotation_angle;

@@ -137,6 +137,14 @@ void Level::handleEvents(GameEngine* ge)
 
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
+  if (gAI_Enable && !is_player1 && ball.isDead())
+  {
+    double ai_angle = -60.0;
+    double ai_shot_dt = 2.0;
+    cannonR.setAngle(ai_angle);
+    ball.shoot(cannonR.getCX(), cannonR.getCY(), ai_shot_dt, cannonR.getAngle());
+  }
+
   if (state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT])
   {
     if (ball.isDead())
@@ -199,6 +207,7 @@ void Level::update()
 {
   dt = timer.getTime();
   timer.start();
+  //std::cout << "dt: " << dt << std::endl;
 
   if (!ball.isDead())
   {
@@ -278,6 +287,9 @@ void Level::update()
 
 void Level::render(GameEngine* ge)
 {
+  Timer rendertime;
+  //rendertime.start();
+  
   SDL_SetRenderDrawColor(ge->renderer, 0xff, 0xff, 0xff, 0);
   SDL_RenderClear(ge->renderer);
 
@@ -294,6 +306,8 @@ void Level::render(GameEngine* ge)
 
   for (auto it = obstacles.begin(); it != obstacles.end(); ++it)
     it->render(ge->renderer);
+  
+  //rendertime.start();
   // draw terrain
   // for some reason won't draw black (0,0,0,0) on white...
   SDL_SetRenderDrawColor(ge->renderer, 0x00, 0x00, 0x00, 1);
@@ -304,6 +318,7 @@ void Level::render(GameEngine* ge)
       SDL_RenderDrawPoint(ge->renderer, it->x, it->y);
     }
   }
+  //std::cout << rendertime.getTime() << std::endl;
 
   cannonL.render(ge->renderer);
   cannonR.render(ge->renderer);
@@ -317,4 +332,6 @@ void Level::render(GameEngine* ge)
   score.render(ge->renderer);
 
   SDL_RenderPresent(ge->renderer);
+
+  //std::cout << rendertime.getTime() << std::endl;
 }

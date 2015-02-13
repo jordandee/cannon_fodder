@@ -5,6 +5,7 @@
 #include "level.h"
 #include "resources.h"
 #include "options.h"
+#include "globals.h"
 
 Title Title::_s;
 
@@ -161,7 +162,8 @@ void Title::selectOption(GameEngine* ge)
       }
     case 1:
       {
-        //ai
+        gAI_Enable = true;
+        ge->changeState(Level::Instance());
         break;
       }
     case 2:

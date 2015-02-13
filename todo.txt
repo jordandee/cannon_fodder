@@ -7,12 +7,15 @@ make sure ranges reset after a cannon death
 options:
 load current settings at options startup
 save current settings when exiting options
+create settings file with defaults if it doesn't exist
+if settings file has bad settings, set them to defaults and overwrite file
 
 controls:
 figure out max shot_dt cap, if any?
 
 polish?:
-optimize framerate if <120
+optimize framerate, preferably 120Hz
+rendering terrain loop is very slow because SDL_RenderDrawPoint uses malloc and free every call
 
 bugs??:
 after adding second slope type, game sometimes slow to close
