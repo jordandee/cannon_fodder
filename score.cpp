@@ -6,8 +6,6 @@
 
 Score::Score()
 {
-  scoreL = 0;
-  scoreR = 0;
   text_texture = NULL;
   scoreL_texture = NULL;
   scoreR_texture = NULL;
@@ -24,9 +22,6 @@ Score::Score()
   battle_rect = {0,0,0,0};
   war_rect = {0,0,0,0};
   text_color = {0,0,0};
-  update_score_textures = false;
-  battleMessage = 0;
-  warMessage = 0;
 }
 
 Score::~Score()
@@ -37,59 +32,97 @@ Score::~Score()
 
 void Score::init(SDL_Renderer* renderer)
 {
-  font12 = TTF_OpenFont("fonts/Chicago.ttf", 12);
-  font24 = TTF_OpenFont("fonts/Chicago.ttf", 24);
+  scoreL = 0;
+  scoreR = 0;
 
-  // score center heading
-  char score[10] = "<-SCORE->";
-
-  // calculate size of score text using font size specified
-  TTF_SizeText(font12, &score[0], &text_rect.w, &text_rect.h);
-  text_rect.x = 400 - text_rect.w/2;
-  text_rect.y = 5;
-
-  text_surf = TTF_RenderText_Solid(font12, score, text_color);
-  text_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
+  battleMessage = 0;
+  warMessage = 0;
+  
+  if (!font12)
+  {
+    font12 = TTF_OpenFont("fonts/Chicago.ttf", 12);
+  }
+  if (!font24)
+  {
+    font24 = TTF_OpenFont("fonts/Chicago.ttf", 24);
+  }
 
   updateScoreTextures(renderer);
+  update_score_textures = false;
+
+  if (!text_texture)
+  {
+    // score center heading
+    char score[10] = "<-SCORE->";
+
+    // calculate size of score text using font size specified
+    TTF_SizeText(font12, &score[0], &text_rect.w, &text_rect.h);
+    text_rect.x = 400 - text_rect.w/2;
+    text_rect.y = 5;
+
+    text_surf = TTF_RenderText_Solid(font12, score, text_color);
+    text_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
+    SDL_FreeSurface(text_surf);
+    text_surf = NULL;
+  }
+
 
   // win a battle messages
-  char battlewon1[30] = "Player 1 has won the battle!!";
+  if (!battleL_texture)
+  {
+    char battlewon1[30] = "Player 1 has won the battle!!";
 
-  TTF_SizeText(font24, &battlewon1[0], &battle_rect.w, &battle_rect.h);
-  battle_rect.x = 400 - battle_rect.w/2;
-  battle_rect.y = 100;
+    TTF_SizeText(font24, &battlewon1[0], &battle_rect.w, &battle_rect.h);
+    battle_rect.x = 400 - battle_rect.w/2;
+    battle_rect.y = 100;
 
-  text_surf = TTF_RenderText_Solid(font24, battlewon1, text_color);
-  battleL_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
+    text_surf = TTF_RenderText_Solid(font24, battlewon1, text_color);
+    battleL_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
+    SDL_FreeSurface(text_surf);
+    text_surf = NULL;
+  }
+  if (!battleR_texture)
+  {
+    char battlewon2[30] = "Player 2 has won the battle!!";
 
-  char battlewon2[30] = "Player 2 has won the battle!!";
-  text_surf = TTF_RenderText_Solid(font24, battlewon2, text_color);
-  battleR_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
+    TTF_SizeText(font24, &battlewon2[0], &battle_rect.w, &battle_rect.h);
+    battle_rect.x = 400 - battle_rect.w/2;
+    battle_rect.y = 100;
+
+    text_surf = TTF_RenderText_Solid(font24, battlewon2, text_color);
+    battleR_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
+    SDL_FreeSurface(text_surf);
+    text_surf = NULL;
+  }
 
   // win a war messages
-  char warwon1[30] = "Player 1 has won the WAR!!!";
+  if (!warL_texture)
+  {
+    char warwon1[30] = "Player 1 has won the WAR!!!";
 
-  TTF_SizeText(font24, &warwon1[0], &war_rect.w, &war_rect.h);
-  war_rect.x = 400 - war_rect.w/2;
-  war_rect.y = 100;
+    TTF_SizeText(font24, &warwon1[0], &war_rect.w, &war_rect.h);
+    war_rect.x = 400 - war_rect.w/2;
+    war_rect.y = 100;
 
-  text_surf = TTF_RenderText_Solid(font24, warwon1, text_color);
-  warL_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
+    text_surf = TTF_RenderText_Solid(font24, warwon1, text_color);
+    warL_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
+    SDL_FreeSurface(text_surf);
+    text_surf = NULL;
+  }
 
-  char warwon2[30] = "Player 2 has won the WAR!!!";
-  text_surf = TTF_RenderText_Solid(font24, warwon2, text_color);
-  warR_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
-  SDL_FreeSurface(text_surf);
-  text_surf = NULL;
+  if (!warR_texture)
+  {
+    char warwon2[30] = "Player 2 has won the WAR!!!";
+    
+    TTF_SizeText(font24, &warwon2[0], &war_rect.w, &war_rect.h);
+    war_rect.x = 400 - war_rect.w/2;
+    war_rect.y = 100;
+
+    text_surf = TTF_RenderText_Solid(font24, warwon2, text_color);
+    warR_texture = SDL_CreateTextureFromSurface(renderer, text_surf);
+    SDL_FreeSurface(text_surf);
+    text_surf = NULL;
+  }
 }
 
 void Score::update(double dt)

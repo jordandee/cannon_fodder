@@ -7,28 +7,9 @@
 #include "globals.h"
 #include "math.h"
 
-void loadSettings()
+void setupSettingsBasedGlobals()
 {
-  std::ifstream ifs;
-  ifs.open("settings.txt", std::ifstream::in);
-
-  int n;
-  std::string s;
-
-  while (ifs >> s >> n)
-  {
-    if (s == "terrain_type")
-      gTerrainOption = n;
-    if (s == "obstacles")
-      gObstaclesOption = n;
-    if (s == "wind")
-      gWindOption = n;
-    if (s == "fullscreen")
-      gFullScreenOption = n;
-  }
-  ifs.close();
-
-  // set default if option is invalid
+  // set default option if current is invalid
   if (gTerrainOption > 4)
   {
     gTerrainOption = 2;
@@ -51,7 +32,7 @@ void loadSettings()
   {
     case 0: gTerrainType = 0; break;
     case 1: gTerrainType = 1; break;
-    case 2: gTerrainType = 2; break;
+    case 2: gTerrainType = 4; break;
     case 3: gTerrainType = 3; break;
     case 4: gTerrainType = nrand(4); break;
     default: break;
@@ -86,6 +67,45 @@ void loadSettings()
     case 1: gFullScreen = 1; break;
     default: break;
   }
+}
+
+void loadSettings()
+{
+  std::ifstream ifs;
+  ifs.open("settings.txt", std::ifstream::in);
+
+  int n;
+  std::string s;
+
+  while (ifs >> s >> n)
+  {
+    if (s == "terrain_type")
+      gTerrainOption = n;
+    if (s == "obstacles")
+      gObstaclesOption = n;
+    if (s == "wind")
+      gWindOption = n;
+    if (s == "fullscreen")
+      gFullScreenOption = n;
+  }
+  ifs.close();
+
+  setupSettingsBasedGlobals();
+}
+
+void saveSettings()
+{
+  std::ofstream ofs;
+  ofs.open("settings.txt", std::ofstream::out | std::ofstream::trunc);
+
+  ofs << "terrain_type " << gTerrainOption << "\n";
+  ofs << "obstacles " << gObstaclesOption << "\n";
+  ofs << "wind " << gWindOption << "\n";
+  ofs << "fullscreen " << gFullScreenOption << "\n";
+
+  ofs.close();
+  
+  setupSettingsBasedGlobals();
 }
 
 // Loads image to a texture

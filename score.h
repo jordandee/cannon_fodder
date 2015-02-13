@@ -30,7 +30,7 @@ class Score
     SDL_Texture *text_texture, *scoreL_texture, *scoreR_texture;
     SDL_Texture *battleL_texture, *battleR_texture;
     SDL_Texture *warL_texture, *warR_texture;
-    TTF_Font *font12, *font24;
+    TTF_Font *font12 = NULL, *font24 = NULL;
     SDL_Surface *text_surf;
     SDL_Rect text_rect, scoreL_rect, scoreR_rect;
     SDL_Rect battle_rect, war_rect;

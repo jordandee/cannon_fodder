@@ -29,7 +29,7 @@ class Ball
   private:
     bool alive;
 
-    SDL_Texture* ball_texture;
+    SDL_Texture* ball_texture = NULL;
     SDL_Rect ball_rect;
 
     double ball_angle;

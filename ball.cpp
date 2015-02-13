@@ -11,12 +11,10 @@
 
 Ball::Ball()
 {
-  alive = false;
-
   ball_rect.w = BALL_WIDTH;
   ball_rect.h = BALL_HEIGHT;
-  ball_rect.x = 0;
-  ball_rect.y = 0;
+  ball_rotation_point.x = BALL_WIDTH/2;
+  ball_rotation_point.y = BALL_HEIGHT/2;
 }
 
 Ball::~Ball()
@@ -26,8 +24,15 @@ Ball::~Ball()
 
 void Ball::init(SDL_Renderer* renderer)
 {
-  ball_texture = NULL;
-  ball_texture = loadTexture("images/cannon_ball.png", renderer);
+  if (!ball_texture)
+  {
+    ball_texture = loadTexture("images/cannon_ball.png", renderer);
+  }
+
+  alive = false;
+  
+  ball_rect.x = 0;
+  ball_rect.y = 0;
 
   x = 0.0;
   vx = 0.0;
@@ -38,8 +43,6 @@ void Ball::init(SDL_Renderer* renderer)
   ay = 0.0;
 
   ball_angle = 0;
-  ball_rotation_point.x = BALL_WIDTH/2;
-  ball_rotation_point.y = BALL_HEIGHT/2;
 }
 
 void Ball::update(double dt)

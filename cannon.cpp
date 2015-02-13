@@ -20,12 +20,18 @@ void Cannon::init(SDL_Renderer* renderer, bool flipped)
 
   is_flipped = flipped;
 
-  cannon_texture = loadTexture("images/cannon_wheel.png", renderer);
+  if (!cannon_texture)
+  {
+    cannon_texture = loadTexture("images/cannon_wheel.png", renderer);
+  }
 
   cannon_rect.w = CANNON_WIDTH;
   cannon_rect.h = CANNON_HEIGHT;
 
-  shaft_texture = loadTexture("images/cannon_shaft.png", renderer);
+  if (!shaft_texture)
+  {
+    shaft_texture = loadTexture("images/cannon_shaft.png", renderer);
+  }
 
   shaft_rect.w = 4;
   shaft_rect.h = 14;

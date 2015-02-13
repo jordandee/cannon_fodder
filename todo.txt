@@ -1,17 +1,12 @@
-options:
-load current settings at options startup
-save current settings when exiting options
-add text to show that options are saved when pressing ESC to go back to main menu
-create settings file with defaults if it doesn't exist
-if settings file has bad settings, set them to defaults and overwrite file
-
 terrain generation:
 add extreme terrain
+finalize smooth/rough terrain
 
 wind:
 make wind actually act like wind and not just air resistance
 
 bugs??:
+likely leaking memory when switching between game, menu, and options
 
 compiling:
 xcc for windows, mxe cc?
@@ -168,3 +163,13 @@ polish?:
 
 options:
 -decide what valid/default options are and add validity check after loading settings.txt
+-load current settings at options startup
+-add exit label with save/cancel buttons
+-make save/cancel buttons work and return you to main menu
+-make sure pressing escape cancels and returns to main menu
+-if settings file has bad settings, set them to defaults and overwrite file
+-create settings file with defaults if it doesn't exist
+
+context switching:
+-make it so it's possible to go back from game to main menu to options and back to a new game
+-fix memory leaks by checking if textures/pointers were already created during state init

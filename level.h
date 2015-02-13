@@ -36,9 +36,8 @@ private:
   std::vector<Pixel> terrain;
   std::vector<Obstacle> obstacles;
 
-  SDL_Point *points;
+  SDL_Point *points = NULL;
   int point_count;
-  int *status;
 
   Cannon cannonL, cannonR;
 
@@ -50,7 +49,7 @@ private:
   bool shooting, shot_live;
   int keyup_frames;
 
-  SDL_Texture* force_texture;
+  SDL_Texture* force_texture = NULL;
   SDL_Rect force_rect;
 
   bool is_player1, is_a_player_dead;

@@ -13,6 +13,7 @@
 #include "math.h"
 #include "obstacle.h"
 #include "globals.h"
+#include "title.h"
 #include "level.h"
 
 Level Level::_s;
@@ -24,30 +25,36 @@ void Level::init(GameEngine* ge)
   cannonL.init(ge->renderer, false);
   cannonR.init(ge->renderer, true);
 
-  for (int i = 0; i < gObstacleTotal; i++)
+  int max_obstacles = 40;
+  if (obstacles.empty())
   {
-    Obstacle obs;
-    obstacles.push_back(obs);
-  }
-  // why? have to init after pushing obstacle onto vector
-  //   otherwise one or more obstacles won't render
-  for (int i = 0; i < gObstacleTotal; ++i)
-  {
-    bool is_flipped = (i % 2 == 1);
-    Obstacle_Type obstacle_type;
-    switch (i)
+    for (int i = 0; i < max_obstacles; i++)
     {
-      case 0: case 1: obstacle_type = HOSPITAL; break;
-      case 2: case 3: obstacle_type = HOUSE; break;
-      default: obstacle_type = TREE; break;
+      Obstacle obs;
+      obstacles.push_back(obs);
     }
-    obstacles[i].init(ge->renderer, obstacle_type, is_flipped);
+    // why? have to init after pushing obstacle onto vector
+    //   otherwise one or more obstacles won't render
+    for (int i = 0; i < max_obstacles; ++i)
+    {
+      bool is_flipped = (i % 2 == 1);
+      Obstacle_Type obstacle_type;
+      switch (i)
+      {
+        case 0: case 1: obstacle_type = HOSPITAL; break;
+        case 2: case 3: obstacle_type = HOUSE; break;
+        default: obstacle_type = TREE; break;
+      }
+      obstacles[i].init(ge->renderer, obstacle_type, is_flipped);
+    }
   }
 
 
-  points = (SDL_Point *)calloc(800*300,sizeof(SDL_Point));
-  status = (int *)calloc(800*300,sizeof(int));
-  point_count = 800*300;
+  if (!points)
+  {
+    points = (SDL_Point *)calloc(800*300,sizeof(SDL_Point));
+    point_count = 800*300;
+  }
 
   spawnLevel();
 
@@ -57,8 +64,10 @@ void Level::init(GameEngine* ge)
   shot_dt = 0.0;
   keyup_frames = 0;
 
-  force_texture = NULL;
-  force_texture = loadTexture("images/cannon_ball.png", ge->renderer);
+  if (!force_texture)
+  {
+    force_texture = loadTexture("images/cannon_ball.png", ge->renderer);
+  }
 
   force_rect.w = 4;
   force_rect.h = 16;
@@ -73,6 +82,8 @@ void Level::init(GameEngine* ge)
 
 void Level::spawnLevel()
 {
+  setupSettingsBasedGlobals();
+
   generateTerrain(terrain);
 
   cannonL.live();
@@ -141,11 +152,15 @@ void Level::handleEvents(GameEngine* ge)
   while (SDL_PollEvent(&e))
   {
     if (e.type == SDL_QUIT)
+    {
       ge->stop();
+    }
     if (e.type == SDL_KEYDOWN)
     {
       if (e.key.keysym.sym == SDLK_ESCAPE)
-        ge->stop();
+      {
+        ge->changeState(Title::Instance());
+      }
     }
   }
 
@@ -365,16 +380,14 @@ void Level::render(GameEngine* ge)
     }
   }
 
-  for (auto it = obstacles.begin(); it != obstacles.end(); ++it)
-    it->render(ge->renderer);
+  for (int i = 0; i < gObstacleTotal; i++)
+  {
+    obstacles[i].render(ge->renderer);
+  }
   
-  //rendertime.start();
   // draw terrain
-  // Calling SDL_RenderDrawPoint over and over is 10 times slower than one call to
-  // SDL_RenderDrawPoints
   SDL_SetRenderDrawColor(ge->renderer, 0x00, 0x00, 0x00, 1);
   SDL_RenderDrawPoints(ge->renderer, points, point_count);
-  //std::cout << rendertime.getTime() << std::endl;
 
   cannonL.render(ge->renderer);
   cannonR.render(ge->renderer);

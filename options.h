@@ -33,7 +33,7 @@ private:
   TTF_Font *font48, *font24;
 
   Button title;
-  static const int total_labels = 4;
+  static const int total_labels = 5;
   union
   {
     Label labels[total_labels];
@@ -43,6 +43,7 @@ private:
       Label obstacles;
       Label wind;
       Label fullscreen;
+      Label exit;
     };
   };
 

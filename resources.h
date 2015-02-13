@@ -4,6 +4,9 @@
 #include <SDL2/SDL.h>
 
 void loadSettings();
+void saveSettings();
+void setupSettingsBasedGlobals();
+
 SDL_Texture* loadTexture(const char* filepath, SDL_Renderer* renderer);
 
 #endif
