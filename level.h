@@ -52,6 +52,12 @@ private:
 
   Score score;
   int win_score;
+  
+  int missed_left;
+  int missed_right;
+  int missed_distance;
+  double last_ai_angle;
+  double last_ai_shot_dt;
 };
 
 #endif

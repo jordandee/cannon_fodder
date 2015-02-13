@@ -163,3 +163,8 @@ bool Ball::isDead()
 {
   return !alive;
 }
+
+SDL_Rect *Ball::getRect()
+{
+  return &ball_rect;
+}

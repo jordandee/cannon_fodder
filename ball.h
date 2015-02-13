@@ -24,6 +24,7 @@ class Ball
     bool checkTerrainCollision(std::vector<Pixel>& terrain);
 
     bool isDead();
+    SDL_Rect *getRect();
 
   private:
     bool alive;

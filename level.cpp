@@ -63,7 +63,7 @@ void Level::init(GameEngine* ge)
   is_player1 = true;
 
   score.init(ge->renderer);
-  win_score = 20;
+  win_score = 25;
 }
 
 void Level::spawnLevel()
@@ -114,6 +114,12 @@ void Level::spawnLevel()
     if (i < 10) // don't worry about trees colliding after 10+ obstacles
       rects.push_back(obstacles[i].getRect());
   }
+    
+  missed_left = false;
+  missed_right = false;
+  missed_distance = 0;
+  last_ai_angle = -60.0;
+  last_ai_shot_dt = 1.0;
 }
 
 void Level::quit()
@@ -139,11 +145,33 @@ void Level::handleEvents(GameEngine* ge)
 
   if (gAI_Enable && !is_player1 && ball.isDead() && !is_a_player_dead)
   {
-    double ai_angle = (-(double)nrand(80)) - 5.0; // -5 -> -85
-    double ai_shot_dt = ((double) nrand(100))/50.0 + 1.0; // 1 -> 3
-    std::cout << ai_angle << " " << ai_shot_dt << std::endl;
+    double ai_angle = (-(double)nrand(60)) - 15.0;
+    double ai_shot_dt = ((double) nrand(100))/50.0 + 1.0; 
+    double ai_increment = ((double)missed_distance)/500.0;
+    if (missed_right)
+    {
+      // if ai keeps guessing close, randomize angle again, otherwise use last angle
+      if (ai_increment >= .04)
+      {
+        ai_angle = last_ai_angle;
+      }
+      ai_shot_dt = last_ai_shot_dt + ai_increment;
+      missed_right = false;
+    }
+    if (missed_left)
+    {
+      if (ai_increment >= .04)
+      {
+        ai_angle = last_ai_angle;
+      }
+      ai_shot_dt = last_ai_shot_dt - ai_increment;
+      missed_left = false;
+    }
+    std::cout << ai_angle << " " << ai_shot_dt << " " << ai_increment << std::endl;
     cannonR.setAngle(ai_angle);
     ball.shoot(cannonR.getCX(), cannonR.getCY(), ai_shot_dt, cannonR.getAngle());
+    last_ai_angle = ai_angle;
+    last_ai_shot_dt = ai_shot_dt;
   }
 
   if (state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT])
@@ -213,14 +241,14 @@ void Level::update()
   if (!ball.isDead())
   {
     ball.update(dt);
-    if (ball.checkTerrainCollision(terrain))
-    {
-      is_player1 = !is_player1;
-    }
 
     if (is_player1)
     {
-      if (ball.checkRectCollision(cannonR.getRect()))
+      if (ball.checkTerrainCollision(terrain))
+      {
+        is_player1 = !is_player1;
+      }
+      else if (ball.checkRectCollision(cannonR.getRect()))
       {
         cannonR.die();
         score.playerLScores(10);
@@ -245,9 +273,26 @@ void Level::update()
         is_player1 = !is_player1;
       }
     }
-    else
+    else if (!is_player1)
     {
-      if (ball.checkRectCollision(cannonL.getRect()))
+      if (ball.checkTerrainCollision(terrain))
+      {
+        if (gAI_Enable)
+        {
+          if (ball.getRect()->x + ball.getRect()->w/2 < cannonL.getCX())
+          {
+            missed_distance = cannonL.getCX() - (ball.getRect()->x + ball.getRect()->w/2);
+            missed_left = true;
+          }
+          else
+          {
+            missed_distance = (ball.getRect()->x + ball.getRect()->w/2) - cannonL.getCX();
+            missed_right = true;
+          }
+        }
+        is_player1 = !is_player1;
+      }
+      else if (ball.checkRectCollision(cannonL.getRect()))
       {
         cannonL.die();
         score.playerRScores(10);
