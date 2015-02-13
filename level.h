@@ -23,6 +23,7 @@ public:
   void render(GameEngine* ge);
 
   void spawnLevel();
+  void copyTerrainToPointsArray();
 
   static Level* Instance() { return &_s; }
 
@@ -34,6 +35,10 @@ private:
 
   std::vector<Pixel> terrain;
   std::vector<Obstacle> obstacles;
+
+  SDL_Point *points;
+  int point_count;
+  int *status;
 
   Cannon cannonL, cannonR;
 

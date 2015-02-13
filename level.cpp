@@ -44,6 +44,11 @@ void Level::init(GameEngine* ge)
     obstacles[i].init(ge->renderer, obstacle_type, is_flipped);
   }
 
+
+  points = (SDL_Point *)calloc(800*300,sizeof(SDL_Point));
+  status = (int *)calloc(800*300,sizeof(int));
+  point_count = 800*300;
+
   spawnLevel();
 
   ball.init(ge->renderer);
@@ -120,6 +125,9 @@ void Level::spawnLevel()
   missed_distance = 0;
   last_ai_angle = -60.0;
   last_ai_shot_dt = 1.0;
+  
+  // copy terrain vector to SDL_Points array for faster rendering
+  copyTerrainToPointsArray();
 }
 
 void Level::quit()
@@ -167,7 +175,8 @@ void Level::handleEvents(GameEngine* ge)
       ai_shot_dt = last_ai_shot_dt - ai_increment;
       missed_left = false;
     }
-    std::cout << ai_angle << " " << ai_shot_dt << " " << ai_increment << std::endl;
+    //std::cout << ai_angle << " " << ai_shot_dt << " " << ai_increment << std::endl;
+
     cannonR.setAngle(ai_angle);
     ball.shoot(cannonR.getCX(), cannonR.getCY(), ai_shot_dt, cannonR.getAngle());
     last_ai_angle = ai_angle;
@@ -179,9 +188,9 @@ void Level::handleEvents(GameEngine* ge)
     if (ball.isDead())
     {
       if (is_player1)
-        cannonL.incrementAngle(5.0);
+        cannonL.incrementAngle(180.0*dt);
       else
-        cannonR.incrementAngle(5.0);
+        cannonR.incrementAngle(180.0*dt);
     }
   }
   if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT])
@@ -189,9 +198,9 @@ void Level::handleEvents(GameEngine* ge)
     if (ball.isDead())
     {
       if (is_player1)
-        cannonL.incrementAngle(-5.0);
+        cannonL.incrementAngle(-180.0*dt);
       else
-        cannonR.incrementAngle(-5.0);
+        cannonR.incrementAngle(-180.0*dt);
     }
   }
   if (state[SDL_SCANCODE_SPACE])
@@ -207,6 +216,7 @@ void Level::handleEvents(GameEngine* ge)
       else
       {
         shot_dt = shot_timer.getTime();
+        keyup_frames = 0;
       }
     }
   }
@@ -242,79 +252,84 @@ void Level::update()
   {
     ball.update(dt);
 
-    if (is_player1)
+    if (ball.getRect()->y > 270) // don't bother with collision detecion if ball is in sky
     {
-      if (ball.checkTerrainCollision(terrain))
+      if (is_player1)
       {
-        is_player1 = !is_player1;
-      }
-      else if (ball.checkRectCollision(cannonR.getRect()))
-      {
-        cannonR.die();
-        score.playerLScores(10);
-        is_player1 = !is_player1;
-        respawn_timer.start();
-        is_a_player_dead = true;
-        if (score.getPlayerLScore() >= win_score)
-          score.warMessage = 1;
-        else
-          score.battleMessage = 1;
-      }
-      else if (gObstacleTotal >= 2 && obstacles[1].alive && ball.checkRectCollision(obstacles[1].getRect()))
-      {
-        obstacles[1].alive = false;
-        score.playerLScores(5);
-        is_player1 = !is_player1;
-      }
-      else if (gObstacleTotal >= 4 && obstacles[3].alive && ball.checkRectCollision(obstacles[3].getRect()))
-      {
-        obstacles[3].alive = false;
-        score.playerLScores(3);
-        is_player1 = !is_player1;
-      }
-    }
-    else if (!is_player1)
-    {
-      if (ball.checkTerrainCollision(terrain))
-      {
-        if (gAI_Enable)
+        if (ball.checkTerrainCollision(terrain))
         {
-          if (ball.getRect()->x + ball.getRect()->w/2 < cannonL.getCX())
-          {
-            missed_distance = cannonL.getCX() - (ball.getRect()->x + ball.getRect()->w/2);
-            missed_left = true;
-          }
-          else
-          {
-            missed_distance = (ball.getRect()->x + ball.getRect()->w/2) - cannonL.getCX();
-            missed_right = true;
-          }
+          copyTerrainToPointsArray();
+          is_player1 = !is_player1;
         }
-        is_player1 = !is_player1;
+        else if (ball.checkRectCollision(cannonR.getRect()))
+        {
+          cannonR.die();
+          score.playerLScores(10);
+          is_player1 = !is_player1;
+          respawn_timer.start();
+          is_a_player_dead = true;
+          if (score.getPlayerLScore() >= win_score)
+            score.warMessage = 1;
+          else
+            score.battleMessage = 1;
+        }
+        else if (gObstacleTotal >= 2 && obstacles[1].alive && ball.checkRectCollision(obstacles[1].getRect()))
+        {
+          obstacles[1].alive = false;
+          score.playerLScores(5);
+          is_player1 = !is_player1;
+        }
+        else if (gObstacleTotal >= 4 && obstacles[3].alive && ball.checkRectCollision(obstacles[3].getRect()))
+        {
+          obstacles[3].alive = false;
+          score.playerLScores(3);
+          is_player1 = !is_player1;
+        }
       }
-      else if (ball.checkRectCollision(cannonL.getRect()))
+      else if (!is_player1)
       {
-        cannonL.die();
-        score.playerRScores(10);
-        is_player1 = !is_player1;
-        respawn_timer.start();
-        is_a_player_dead = true;
-        if (score.getPlayerRScore() >= win_score)
-          score.warMessage = 2;
-        else
-          score.battleMessage = 2;
-      }
-      else if (gObstacleTotal >= 2 && obstacles[0].alive && ball.checkRectCollision(obstacles[0].getRect()))
-      {
-        obstacles[0].alive = false;
-        score.playerRScores(5);
-        is_player1 = !is_player1;
-      }
-      else if (gObstacleTotal >= 4 && obstacles[2].alive && ball.checkRectCollision(obstacles[2].getRect()))
-      {
-        obstacles[2].alive = false;
-        score.playerRScores(3);
-        is_player1 = !is_player1;
+        if (ball.checkTerrainCollision(terrain))
+        {
+          if (gAI_Enable)
+          {
+            if (ball.getRect()->x + ball.getRect()->w/2 < cannonL.getCX())
+            {
+              missed_distance = cannonL.getCX() - (ball.getRect()->x + ball.getRect()->w/2);
+              missed_left = true;
+            }
+            else
+            {
+              missed_distance = (ball.getRect()->x + ball.getRect()->w/2) - cannonL.getCX();
+              missed_right = true;
+            }
+          }
+          copyTerrainToPointsArray();
+          is_player1 = !is_player1;
+        }
+        else if (ball.checkRectCollision(cannonL.getRect()))
+        {
+          cannonL.die();
+          score.playerRScores(10);
+          is_player1 = !is_player1;
+          respawn_timer.start();
+          is_a_player_dead = true;
+          if (score.getPlayerRScore() >= win_score)
+            score.warMessage = 2;
+          else
+            score.battleMessage = 2;
+        }
+        else if (gObstacleTotal >= 2 && obstacles[0].alive && ball.checkRectCollision(obstacles[0].getRect()))
+        {
+          obstacles[0].alive = false;
+          score.playerRScores(5);
+          is_player1 = !is_player1;
+        }
+        else if (gObstacleTotal >= 4 && obstacles[2].alive && ball.checkRectCollision(obstacles[2].getRect()))
+        {
+          obstacles[2].alive = false;
+          score.playerRScores(3);
+          is_player1 = !is_player1;
+        }
       }
     }
   }
@@ -355,20 +370,14 @@ void Level::render(GameEngine* ge)
   
   //rendertime.start();
   // draw terrain
-  // for some reason won't draw black (0,0,0,0) on white...
+  // Calling SDL_RenderDrawPoint over and over is 10 times slower than one call to
+  // SDL_RenderDrawPoints
   SDL_SetRenderDrawColor(ge->renderer, 0x00, 0x00, 0x00, 1);
-  for (auto it = terrain.begin(); it != terrain.end(); ++it)
-  {
-    if (it->status)
-    {
-      SDL_RenderDrawPoint(ge->renderer, it->x, it->y);
-    }
-  }
+  SDL_RenderDrawPoints(ge->renderer, points, point_count);
   //std::cout << rendertime.getTime() << std::endl;
 
   cannonL.render(ge->renderer);
   cannonR.render(ge->renderer);
-
 
   ball.render(ge->renderer);
 
@@ -380,4 +389,21 @@ void Level::render(GameEngine* ge)
   SDL_RenderPresent(ge->renderer);
 
   //std::cout << rendertime.getTime() << std::endl;
+}
+  
+// copy terrain vector to SDL_Points array for faster rendering
+void Level::copyTerrainToPointsArray()
+{
+  int i = 0;
+  point_count = 0;
+  while(i < 300*800)
+  {
+    if (terrain[i].status)
+    {
+      points[point_count].x = terrain[i].x;
+      points[point_count].y = terrain[i].y;
+      ++point_count;
+    }
+    ++i;
+  }
 }
