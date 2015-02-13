@@ -1,11 +1,17 @@
 options:
 load current settings at options startup
 save current settings when exiting options
+add text to show that options are saved when pressing ESC to go back to main menu
 create settings file with defaults if it doesn't exist
 if settings file has bad settings, set them to defaults and overwrite file
 
+terrain generation:
+add extreme terrain
+
+wind:
+make wind actually act like wind and not just air resistance
+
 bugs??:
-after adding second slope type, game sometimes slow to close
 
 compiling:
 xcc for windows, mxe cc?
@@ -20,7 +26,7 @@ curvy terrain gen
 terrain generation:
 -create flat terrain
 -decide how to store terrain info - vector of pixels with x,y, status
--write function to determine if a pixel status based on a slope
+-write function to determine pixel status based on a slope
 -create terrain with one gradual slope
 -create terrain with two gradual slopes
 -create terrain with four gradual slopes
@@ -159,3 +165,6 @@ polish?:
 -optimize framerate, frame loop went from 30-40ms -> 3-12ms
 -rendering terrain loop was slow because SDL_RenderDrawPoint uses malloc and free every call, used one SDL_RenderDrawPoints call instead
 -made it so collision detection is only on when ball is near the highest level objects can be, collision detection eats 6ms/frame
+
+options:
+-decide what valid/default options are and add validity check after loading settings.txt
