@@ -157,6 +157,7 @@ void Title::selectOption(GameEngine* ge)
   {
     case 0:
       {
+        gAI_Enable = false;
         ge->changeState(Level::Instance());
         break;
       }

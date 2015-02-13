@@ -1,6 +1,4 @@
 ai:
-ai first version, just does same shot every time
-randomize shot within particular angle and force range
 update one side of range based on where shot landed relative to opponent
 make sure ranges reset after a cannon death
 
@@ -19,6 +17,7 @@ rendering terrain loop is very slow because SDL_RenderDrawPoint uses malloc and 
 
 bugs??:
 after adding second slope type, game sometimes slow to close
+player can kill self sometimes
 
 compiling:
 xcc for windows, mxe cc?
@@ -158,3 +157,7 @@ gameplay:
 -implement wind
 -set wind based on global settings
 -implement fullscreen
+
+ai:
+-ai first version, just does same shot every time
+-randomize shot within particular angle and force range

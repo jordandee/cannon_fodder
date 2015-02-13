@@ -137,10 +137,11 @@ void Level::handleEvents(GameEngine* ge)
 
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
-  if (gAI_Enable && !is_player1 && ball.isDead())
+  if (gAI_Enable && !is_player1 && ball.isDead() && !is_a_player_dead)
   {
-    double ai_angle = -60.0;
-    double ai_shot_dt = 2.0;
+    double ai_angle = (-(double)nrand(80)) - 5.0; // -5 -> -85
+    double ai_shot_dt = ((double) nrand(100))/50.0 + 1.0; // 1 -> 3
+    std::cout << ai_angle << " " << ai_shot_dt << std::endl;
     cannonR.setAngle(ai_angle);
     ball.shoot(cannonR.getCX(), cannonR.getCY(), ai_shot_dt, cannonR.getAngle());
   }
