@@ -32,7 +32,7 @@ void setupSettingsBasedGlobals()
   {
     case 0: gTerrainType = 0; break;
     case 1: gTerrainType = 1; break;
-    case 2: gTerrainType = 4; break;
+    case 2: gTerrainType = 2; break;
     case 3: gTerrainType = 3; break;
     case 4: gTerrainType = nrand(4); break;
     default: break;

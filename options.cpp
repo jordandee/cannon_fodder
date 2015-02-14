@@ -201,6 +201,7 @@ void Options::handleEvents(GameEngine* ge)
 
 void Options::update()
 {
+  SDL_Delay(4);
   if (mouse_moved)
   {
     highlight_enable = false;

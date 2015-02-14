@@ -1,9 +1,9 @@
-terrain generation:
-add extreme terrain
-finalize smooth/rough terrain
-
 wind:
 make wind actually act like wind and not just air resistance
+
+options:
+resize window if fullscreen setting was changed on exit
+final test run through, make sure all settings work
 
 bugs??:
 likely leaking memory when switching between game, menu, and options
@@ -173,3 +173,7 @@ options:
 context switching:
 -make it so it's possible to go back from game to main menu to options and back to a new game
 -fix memory leaks by checking if textures/pointers were already created during state init
+
+terrain generation:
+-add extreme terrain
+-finalize smooth/rough terrain

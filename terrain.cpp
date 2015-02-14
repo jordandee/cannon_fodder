@@ -7,7 +7,7 @@
 
 void generateTerrain(std::vector<Pixel>& terrain)
 {
-  const double YFLOOR = 590.0;
+  const double YFLOOR = 575.0;
   // populate terrain vector with default flat terrain
   bool create_vector = terrain.empty();
   int i = 0;
@@ -29,24 +29,10 @@ void generateTerrain(std::vector<Pixel>& terrain)
 
   if (gTerrainType == 0) //flat
     return;
-  else if (gTerrainType == 1) //single slope
+  else if (gTerrainType == 1) // smooth - double slope
   {
-    // single slope terrain
-    double slope = -1.0/8.0;
-    double y1 = 350, x1 = 0;
-
-    // if current y is above slope line defined above, make it white
-    for (auto it = terrain.begin(); it != terrain.end(); ++it)
-    {
-      double y = y1 + slope * ((double)it->x - x1);
-      if ((int)y >= it->y)
-        it->status = 0;
-    }
-  }
-  else if (gTerrainType == 2) //double slope
-  {
-    double s1 = -1.0/4.0, s2 = 1.0/4.0;
-    double y1 = 400, x1 = 0, y2 = 300, x2 = 400;
+    double s1 = -1.0/((double)nrand(3)+2.0), s2 = 1.0/((double)nrand(3)+2.0);
+    double y1 = 400, x1 = 0, y2 = 300, x2 = 250 + nrand(400);
 
     for (auto it = terrain.begin(); it != terrain.end(); ++it)
     {
@@ -64,42 +50,7 @@ void generateTerrain(std::vector<Pixel>& terrain)
       }
     }
   }
-  else if (gTerrainType == 3) // quadruple slope
-  {
-    double s1 = -1.0/4.0, s2 = 1.0/4.0;
-    double s3 = -1.0/4.0, s4 = 1.0/4.0;
-    double y1 = 400, x1 = 0, y2 = 300, x2 = 200;
-    double y3 = 400, x3 = 400, y4 = 300, x4 = 600;
-
-    for (auto it = terrain.begin(); it != terrain.end(); ++it)
-    {
-      if (it->x < x2)
-      {
-        double y = y1 + s1 * ((double)it->x - x1);
-        if ((int)y >= it->y)
-          it->status = 0;
-      }
-      else if (it->x < x3)
-      {
-        double y = y2 + s2 * ((double)it->x - x2);
-        if ((int)y >= it->y)
-          it->status = 0;
-      }
-      else if (it->x < x4)
-      {
-        double y = y3 + s3 * ((double)it->x - x3);
-        if ((int)y >= it->y)
-          it->status = 0;
-      }
-      else
-      {
-        double y = y4 + s4 * ((double)it->x - x4);
-        if ((int)y >= it->y)
-          it->status = 0;
-      }
-    }
-  }
-  else if (gTerrainType == 4) // quadruple slope with randomization
+  else if (gTerrainType == 2) // quadruple slope with randomization
   {
     double s1 = -1.0/((double)nrand(8) + 1.0);
     double x1 = 0;
@@ -149,6 +100,114 @@ void generateTerrain(std::vector<Pixel>& terrain)
       else
       {
         double y = y4 + s4 * ((double)it->x - x4);
+        y = fmin(y, YFLOOR);
+        if ((int)y >= it->y)
+          it->status = 0;
+      }
+    }
+  }
+  else if (gTerrainType == 3) // extreme - 8 slopes, likely to be steep
+  {
+    double s1 = -8.0/((double)nrand(12) + 1.0);
+    double x1 = 0;
+    double y1 = 350 + nrand(150);
+
+    double s2 = 8.0/((double)nrand(12) + 1.0);
+    double x2 = 50 + nrand(100);
+    double y2 = (y1 + s1 * ((double)x2 - x1));
+    if (y2 < 300) y2 = 300;
+    if (y2 > 550) y2 = 550;
+
+    double s3 = -8.0/((double)nrand(12) + 1.0);
+    double x3 = 150 + nrand(100);
+    double y3 = y2 + s2 * ((double)x3 - x2);
+    if (y3 < 300) y3 = 300;
+    if (y3 > 550) y3 = 550;
+
+    double s4 = 8.0/((double)nrand(12) + 1.0);
+    double x4 = 250 + nrand(100);
+    double y4 = y3 + s3 * ((double)x4 - x3);
+    if (y4 < 300) y4 = 300;
+    if (y4 > 550) y4 = 550;
+
+    double s5 = -8.0/((double)nrand(12) + 1.0);
+    double x5 = 350 + nrand(100);
+    double y5 = y4 + s4 * ((double)x5 - x4);
+    if (y5 < 300) y5 = 300;
+    if (y5 > 550) y5 = 550;
+
+    double s6 = 8.0/((double)nrand(12) + 1.0);
+    double x6 = 450 + nrand(100);
+    double y6 = y5 + s5 * ((double)x6 - x5);
+    if (y6 < 300) y6 = 300;
+    if (y6 > 550) y6 = 550;
+
+    double s7 = -8.0/((double)nrand(12) + 1.0);
+    double x7 = 550 + nrand(100);
+    double y7 = y6 + s6 * ((double)x7 - x6);
+    if (y7 < 300) y7 = 300;
+    if (y7 > 550) y7 = 550;
+
+    double s8 = 8.0/((double)nrand(12) + 1.0);
+    double x8 = 650 + nrand(100);
+    double y8 = y7 + s7 * ((double)x8 - x7);
+    if (y8 < 300) y8 = 300;
+    if (y8 > 550) y8 = 550;
+
+    for (auto it = terrain.begin(); it != terrain.end(); ++it)
+    {
+      if (it->x < x2)
+      {
+        double y = y1 + s1 * ((double)it->x - x1);
+        y = fmin(y, YFLOOR);
+        if ((int)y >= it->y)
+          it->status = 0;
+      }
+      else if (it->x < x3)
+      {
+        double y = y2 + s2 * ((double)it->x - x2);
+        y = fmin(y, YFLOOR);
+        if ((int)y >= it->y)
+          it->status = 0;
+      }
+      else if (it->x < x4)
+      {
+        double y = y3 + s3 * ((double)it->x - x3);
+        y = fmin(y, YFLOOR);
+        if ((int)y >= it->y)
+          it->status = 0;
+      }
+      else if (it->x < x5)
+      {
+        double y = y4 + s4 * ((double)it->x - x4);
+        y = fmin(y, YFLOOR);
+        if ((int)y >= it->y)
+          it->status = 0;
+      }
+      else if (it->x < x6)
+      {
+        double y = y5 + s5 * ((double)it->x - x5);
+        y = fmin(y, YFLOOR);
+        if ((int)y >= it->y)
+          it->status = 0;
+      }
+      else if (it->x < x7)
+      {
+        double y = y6 + s6 * ((double)it->x - x6);
+        y = fmin(y, YFLOOR);
+        if ((int)y >= it->y)
+          it->status = 0;
+      }
+      else if (it->x < x8)
+      {
+        double y = y7 + s7 * ((double)it->x - x7);
+        y = fmin(y, YFLOOR);
+        if ((int)y >= it->y)
+          it->status = 0;
+      }
+      else
+      {
+        double y = y8 + s8 * ((double)it->x - x8);
         y = fmin(y, YFLOOR);
         if ((int)y >= it->y)
           it->status = 0;

@@ -130,6 +130,7 @@ void Title::handleEvents(GameEngine* ge)
 
 void Title::update()
 {
+  SDL_Delay(4);
 }
 
 void Title::render(GameEngine* ge)
