@@ -83,7 +83,7 @@ void Level::init(GameEngine* ge)
 void Level::spawnLevel()
 {
   setupSettingsBasedGlobals();
-
+  
   generateTerrain(terrain);
 
   cannonL.live();
@@ -91,7 +91,7 @@ void Level::spawnLevel()
   is_a_player_dead = false;
 
   // find placement for left cannon, top ground pixel at randomized x
-  int cannonL_cx = 150 + nrand(100); // center x of cannon
+  int cannonL_cx = 100 + nrand(200); // center x of cannon
   auto lt = std::find_if(terrain.begin(), terrain.end(),
       [&cannonL_cx](Pixel p)
       {
@@ -105,7 +105,7 @@ void Level::spawnLevel()
   fixTerrain(terrain, cannonL.getRect());
 
   // find placement for right cannon, top ground pixel at randomized x
-  int cannonR_cx = 550 + nrand(100);
+  int cannonR_cx = 500 + nrand(200);
   auto rt = std::find_if(terrain.begin(), terrain.end(),
       [&cannonR_cx](Pixel p)
       {

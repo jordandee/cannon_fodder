@@ -8,7 +8,7 @@ extern unsigned int gFullScreenOption;
 
 extern unsigned int gTerrainType;
 extern unsigned int gObstacleTotal;
-extern unsigned int gWind;
+extern double gWind;
 extern unsigned int gFullScreen;
 
 extern unsigned int gAI_Enable;

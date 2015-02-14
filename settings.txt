@@ -1,4 +1,4 @@
 terrain_type 4
 obstacles 4
-wind 3
+wind 2
 fullscreen 0

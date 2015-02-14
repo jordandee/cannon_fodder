@@ -55,12 +55,28 @@ void setupSettingsBasedGlobals()
   }
   switch(gWindOption)
   {
-    case 0: gWind = 0; break;
-    case 1: gWind = 1; break;
-    case 2: gWind = 2; break;
-    case 3: gWind = nrand(3); break;
+    case 0: gWind = 0.0; break;
+    case 1:
+            {
+              double direction = (nrand(2) < 1) ? (double)-1.0 : (double)1.0;
+              gWind = direction * (double)(1.0 + (double)nrand(40));
+              break;
+            }
+    case 2: 
+            {
+              double direction = (nrand(2)) ? -1.0 : 1.0;
+              gWind = direction * (double)(20.0 + (double)nrand(100));
+              break;
+            }
+    case 3: 
+            {
+              double direction = (nrand(2)) ? -1.0 : 1.0;
+              gWind = direction * (double)(1.0 + (double)nrand(200));
+              break;
+            }
     default: break;
   }
+  //std::cout << gWind << std::endl;
   switch(gFullScreenOption)
   {
     case 0: gFullScreen = 0; break;

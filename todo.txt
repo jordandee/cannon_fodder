@@ -1,9 +1,7 @@
-wind:
-make wind actually act like wind and not just air resistance
 
 options:
+have escape key default to saving settings
 resize window if fullscreen setting was changed on exit
-final test run through, make sure all settings work
 
 bugs??:
 likely leaking memory when switching between game, menu, and options
@@ -15,6 +13,7 @@ xcc for web js, emscripten?
 would be nice:
 get ChicagoBold font since I believe that was used in the original game
 curvy terrain gen
+extra mode: cannon balls bounce
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -177,3 +176,6 @@ context switching:
 terrain generation:
 -add extreme terrain
 -finalize smooth/rough terrain
+
+wind:
+-make wind actually act like wind and not just air resistance

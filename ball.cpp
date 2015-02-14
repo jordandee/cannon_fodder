@@ -1,13 +1,15 @@
 #include <SDL2/SDL.h>
+#include <iostream>
 #include <vector>
 #include <cmath>
-#include <cassert>
 #include "resources.h"
 #include "terrain.h"
 #include "globals.h"
 #include "ball.h"
+#include "math.h"
 
 #define PI 3.14159265
+#define abs(x) (((x) < 0) ? -x : x)
 
 Ball::Ball()
 {
@@ -49,23 +51,37 @@ void Ball::update(double dt)
 {
   if (alive)
   {
-    // simplified wind resistance
-    assert(gWind < 3); // #define NDEBUG to turn of cassert
-    if (gWind == 0) // no wind resistance
+    // simplified wind resistance, bad physics with lots of magic numbers
+    double wa = 0.0;
+    if (gWindOption == 0) // no wind resistance
     {
       vx = vx + (ax * dt);
       vy = vy + (ay * dt);
     }
-    else if (gWind == 1) // some wind resistance
+    else // wind resistance
     {
-      vx = vx + (ax * dt) + (vx * -1/16 * dt);
-      vy = vy + (ay * dt) + (vy * -1/16 * dt);
+      double scale = 1.0/4.0;
+      if (vx >= 0.0 && gWind >= 0.0 && abs(vx) < abs(1.4*gWind))
+      {
+        wa = (gWind+vx) * scale * dt;
+      }
+      else if (vx >= 0.0 && gWind < 0.0)
+      {
+        wa = (gWind-vx) * scale *dt;
+      }
+      else if (vx < 0.0 && gWind < 0.0 && abs(vx) < abs(1.4*gWind))
+      {
+        wa = (gWind+vx) * scale * dt;
+      }
+      else if (vx < 0.0 && gWind >= 0.0)
+      {
+        wa = (gWind-vx) * scale *dt;
+      }
+     
+      vx = vx + (ax * dt) + wa;
+      vy = vy + (ay * dt) + (vy * -1/16 * dt); // just air resistance in y direction
     }
-    else if (gWind == 2) // stronger wind resistance
-    {
-      vx = vx + (ax * dt) + (vx * -1/4 * dt);
-      vy = vy + (ay * dt) + (vy * -1/4 * dt);
-    }
+    //std::cout << vx << "  " << gWind << "  " << wa << std::endl;
 
     x = x + vx * dt + .5 * ax * dt * dt;
     y = y + vy * dt + .5 * ay * dt * dt;
