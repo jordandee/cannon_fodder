@@ -88,6 +88,20 @@ void Options::handleEvents(GameEngine* ge)
       if (key == SDLK_ESCAPE)
       {
         ge->changeState(Title::Instance());
+        gTerrainOption = terrain_type.active_selection;
+        gObstaclesOption = obstacles.active_selection;
+        gWindOption = wind.active_selection;
+        gFullScreenOption = fullscreen.active_selection;
+
+        saveSettings();
+        if (gFullScreen == 1)
+        {
+          SDL_SetWindowFullscreen(ge->win, SDL_WINDOW_FULLSCREEN);
+        }
+        else 
+        {
+          SDL_SetWindowFullscreen(ge->win, 0);
+        }
       }
 
       if (!highlight_enable)
@@ -130,6 +144,14 @@ void Options::handleEvents(GameEngine* ge)
               gFullScreenOption = fullscreen.active_selection;
 
               saveSettings();
+              if (gFullScreen == 1)
+              {
+                SDL_SetWindowFullscreen(ge->win, SDL_WINDOW_FULLSCREEN);
+              }
+              else 
+              {
+                SDL_SetWindowFullscreen(ge->win, 0);
+              }
             }
             ge->changeState(Title::Instance());
           }
@@ -184,6 +206,14 @@ void Options::handleEvents(GameEngine* ge)
               gFullScreenOption = fullscreen.active_selection;
 
               saveSettings();
+              if (gFullScreen == 1)
+              {
+                SDL_SetWindowFullscreen(ge->win, SDL_WINDOW_FULLSCREEN);
+              }
+              else 
+              {
+                SDL_SetWindowFullscreen(ge->win, 0);
+              }
             }
             ge->changeState(Title::Instance());
           }

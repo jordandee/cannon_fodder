@@ -144,6 +144,7 @@ void Level::spawnLevel()
 void Level::quit()
 {
   SDL_DestroyTexture(force_texture);
+  force_texture = NULL;
 }
 
 void Level::handleEvents(GameEngine* ge)

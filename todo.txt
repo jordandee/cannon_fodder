@@ -1,10 +1,5 @@
-
-options:
-have escape key default to saving settings
-resize window if fullscreen setting was changed on exit
-
 bugs??:
-likely leaking memory when switching between game, menu, and options
+leaking memory when switching between game and menu over and over
 
 compiling:
 xcc for windows, mxe cc?
@@ -14,6 +9,8 @@ would be nice:
 get ChicagoBold font since I believe that was used in the original game
 curvy terrain gen
 extra mode: cannon balls bounce
+arrow indicator for when ball is above screen
+separate player 1 and player 2's controls so they don't share same keys
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -179,3 +176,10 @@ terrain generation:
 
 wind:
 -make wind actually act like wind and not just air resistance
+
+options:
+-have escape key default to saving settings
+-resize window if fullscreen setting was changed on exit
+
+bugs??:
+-fix force texture disappearing

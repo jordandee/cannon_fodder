@@ -24,6 +24,7 @@ void GameEngine::init()
     // WARNING: if game crashes in fullscreen, x11 desktop stays at 800x600
     SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN);
     // borderless, preserves aspect ratio but will add letterbox if needed
+    //  have to manually stretch textures
     //SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
     //SDL_RenderSetLogicalSize(renderer, 800, 600);
   }
@@ -31,7 +32,7 @@ void GameEngine::init()
 
 void GameEngine::quit()
 {
-  //SDL_SetWindowFullscreen(win, 0);
+  SDL_SetWindowFullscreen(win, 0);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(win);
   TTF_Quit();
