@@ -6,6 +6,7 @@
 #include "resources.h"
 #include "options.h"
 #include "globals.h"
+#include "timer.h"
 
 Title Title::_s;
 
@@ -45,6 +46,9 @@ void Title::init(GameEngine* ge)
   exit = {};
   makeButton(ge->renderer, &exit, "Exit", font24, text_color);
   setButtonPosition(&exit, 500, 500);
+  
+  startup.start();
+  ready = false;
 }
 
 void Title::quit()
@@ -96,14 +100,20 @@ void Title::handleEvents(GameEngine* ge)
       else if (key == SDLK_RETURN || key == SDLK_SPACE || 
                key == SDLK_KP_0 || key == SDLK_KP_ENTER)
       {
-        selectOption(ge);
+        if (ready)
+        {
+          selectOption(ge);
+        }
       }
     }
     else if (e.type == SDL_MOUSEBUTTONDOWN)
     {
       if (e.button.button == SDL_BUTTON_LEFT)
       {
-        selectOption(ge);
+        if (ready)
+        {
+          selectOption(ge);
+        }
       }
     }
     else if (e.type == SDL_MOUSEMOTION)
@@ -130,7 +140,11 @@ void Title::handleEvents(GameEngine* ge)
 
 void Title::update()
 {
-  SDL_Delay(4);
+  if (!ready && startup.getTime() > .1f)
+  {
+    ready = true;
+  }
+  //SDL_Delay(1);
 }
 
 void Title::render(GameEngine* ge)

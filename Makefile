@@ -1,6 +1,8 @@
 #Getting fancier with dem makes
 
-CC=g++
+#CROSS=i686-pc-mingw32-
+#CC=$(CROSS)g++
+CC=$g++
 #-g is -g2, for getting info for debugger, -g3 gets more info
 CFLAGS=-c -std=c++11 -g
 LIBS=-lSDL2 -lSDL2_image -lSDL2_ttf

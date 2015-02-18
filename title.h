@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "gamestate.h"
 #include "buttons.h"
+#include "timer.h"
 
 class Title : public GameState
 {
@@ -42,6 +43,9 @@ private:
       Button vs_human, vs_bot, options, exit;
     };
   };
+
+  Timer startup;
+  bool ready;
 
   int option;
 };
